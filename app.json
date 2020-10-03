@@ -21,6 +21,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "1.0.0",
+    "githubUrl": "https://github.com/PronteffTrainingRepository/MyEmployeePortal"
   }
 }

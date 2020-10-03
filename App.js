@@ -17,21 +17,33 @@ export default function App() {
       {/* <Login /> */}
       <Home />
       {/* <Map /> */}
+      {/* <Sheet /> */}
     </View>
-    // <NavigationContainer>
-    //   <Stack.Navigator initialRouteName="Login">
-    //     <Stack.Screen
-    //       name="Login"
-    //       component={Login}
-    //       options={{ headerShown: false }}
-    //     />
-    //     <Stack.Screen
-    //       name="Home"
-    //       component={Home}
-    //       options={{ headerShown: false }}
-    //     />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
+    //   <NavigationContainer>
+    //     <Stack.Navigator initialRouteName="Login">
+    //       <Stack.Screen
+    //         name="Login"
+    //         component={Login}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="Home"
+    //         component={Home}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="Sheet"
+    //         component={Sheet}
+    //         options={{ headerShown: false }}
+    //       />
+
+    //       <Stack.Screen
+    //         name="DrawerScreen"
+    //         component={DrawerScreen}
+    //         options={{ headerShown: false }}
+    //       />
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
   );
 }
 
@@ -42,9 +54,11 @@ const styles = StyleSheet.create({
   },
 });
 const Drawer = createDrawerNavigator();
-function DrawerScreen() {
+export function DrawerScreen() {
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+    >
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Map" component={Map} />
       <Drawer.Screen name="Sheet" component={Sheet} />
