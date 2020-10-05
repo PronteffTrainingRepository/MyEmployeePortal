@@ -65,10 +65,10 @@ function Home({ route, navigation }) {
         });
         if (location.coords !== null) {
           if (
-            (location.coords.latitude >= 17.438655 ||
-              location.coords.latitude <= 17.438719) &&
-            (location.coords.longitude >= 78.394564 ||
-              location.coords.longitude <= 78.39474)
+            (location.coords.latitude >= 17.43873 ||
+              location.coords.latitude <= 17.43877) &&
+            (location.coords.longitude >= 78.39461 ||
+              location.coords.longitude <= 78.39469)
           ) {
             alert("attence marked");
           } else {
@@ -125,7 +125,7 @@ function Home({ route, navigation }) {
     <View>
       <StatusBar />
       {/* header bar starts */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <View>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <AntDesign name="caretright" size={24} color="black" />
@@ -143,11 +143,11 @@ function Home({ route, navigation }) {
             Home
           </Text>
         </View>
-      </View>
+      </View> */}
 
       {/* header bar ends */}
       {/* Attendence Starts */}
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: "center", marginBottom: 10 }}>
         <View
           style={{
             backgroundColor: "white",
