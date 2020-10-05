@@ -10,33 +10,18 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { ProgressChart } from "react-native-chart-kit";
 import MapView from "react-native-maps";
-import { Marker } from "react-native-maps";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import MapViewDirections from "react-native-maps-directions";
-import { NavigationContainer, DrawerActions } from "@react-navigation/native";
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from "@react-navigation/drawer";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 import Constants from "expo-constants";
 import * as Location from "expo-location";
 
 const ht = Dimensions.get("window").width;
 const wd = Dimensions.get("window").height;
 
-// const origin = { latitude: 37.3318456, longitude: -122.0296002 };
-// const destination = { latitude: 37.771707, longitude: -122.4053769 };
-// const GOOGLE_MAPS_APIKEY = "AIzaSyBTHErKQB1XnK0zFBlaoL2A7zkKA4r7glI";
-
 function Home({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [attendence, setAttendence] = useState(0);
-  // const { user } = route.params;
 
   const [region, setRegion] = useState({
     latitude: 37.78825,
@@ -65,7 +50,6 @@ function Home({ navigation }) {
           longitude: location.coords.longitude,
           latitude: location.coords.latitude,
         });
-        //  navigation.navigate("Sheet");
         if (location.coords !== null) {
           if (
             (location.coords.latitude >= 17.43873 ||
@@ -83,13 +67,6 @@ function Home({ navigation }) {
       })();
     }
   };
-  // const go = () => {
-  //   setRegion({
-  //     ...region,
-  //     longitude: location.coords.longitude,
-  //     latitude: location.coords.latitude,
-  //   });
-  // };
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
@@ -194,15 +171,6 @@ function Home({ navigation }) {
           followUserLocation={true}
           zoomControlEnabled={true}
         >
-          {/* <MapViewDirections
-            origin={origin}
-            destination={destination}
-            apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={3}
-            strokeColor="hotpink"
-            resetOnChange={true}
-            directionsServiceBaseUrl="https://maps.googleapis.com/maps/api/directions/json"
-          /> */}
         </MapView>
       </View>
       {/* Map Ends */}
@@ -211,7 +179,6 @@ function Home({ navigation }) {
         style={{ position: "absolute", bottom: ht * 0.08, right: wd * 0.03 }}
       >
         <TouchableOpacity
-          // onPress={See}
           onPress={See}
           style={{
             width: wd * 0.2,
