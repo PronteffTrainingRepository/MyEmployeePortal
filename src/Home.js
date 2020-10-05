@@ -32,9 +32,11 @@ const wd = Dimensions.get("window").height;
 // const destination = { latitude: 37.771707, longitude: -122.4053769 };
 // const GOOGLE_MAPS_APIKEY = "AIzaSyBTHErKQB1XnK0zFBlaoL2A7zkKA4r7glI";
 
-function Home({ route, navigation }) {
+function Home({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [attendence, setAttendence] = useState(0);
+  // const { user } = route.params;
 
   const [region, setRegion] = useState({
     latitude: 37.78825,
@@ -63,6 +65,7 @@ function Home({ route, navigation }) {
           longitude: location.coords.longitude,
           latitude: location.coords.latitude,
         });
+        //  navigation.navigate("Sheet");
         if (location.coords !== null) {
           if (
             (location.coords.latitude >= 17.43873 ||
@@ -71,6 +74,8 @@ function Home({ route, navigation }) {
               location.coords.longitude <= 78.39469)
           ) {
             alert("attence marked");
+            setAttendence(attendence + 0.01);
+            navigation.navigate("Sheet");
           } else {
             alert("Not in Range");
           }
@@ -91,8 +96,6 @@ function Home({ route, navigation }) {
   } else if (location) {
     text = JSON.stringify(location);
   }
-  // const { user } = route.params;
-  const [attendence, setAttendence] = useState(0);
   const data = {
     // labels: ["Swim", "Bike", "Run"], // optional
     data: [attendence],
@@ -125,7 +128,7 @@ function Home({ route, navigation }) {
     <View>
       <StatusBar />
       {/* header bar starts */}
-      {/* <View style={styles.header}>
+      <View style={styles.header}>
         <View>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <AntDesign name="caretright" size={24} color="black" />
@@ -143,7 +146,7 @@ function Home({ route, navigation }) {
             Home
           </Text>
         </View>
-      </View> */}
+      </View>
 
       {/* header bar ends */}
       {/* Attendence Starts */}
@@ -160,8 +163,10 @@ function Home({ route, navigation }) {
           <View style={{ alignItems: "center" }}>
             <Text>Attendence</Text>
             <Text>Hi user, Your Attenece till Now is..</Text>
-            <Text>Your Attendence Percentage attendence is %</Text>
-            <Text>location :{text}</Text>
+            <Text>
+              Your {Attendence} Percentage is {attendence} %
+            </Text>
+            {/* <Text>location :{text}</Text> */}
           </View>
           <View style={{ alignItems: "flex-end", borderRadius: ht * 0.2 }}>
             <ProgressChart
@@ -207,11 +212,7 @@ function Home({ route, navigation }) {
       >
         <TouchableOpacity
           // onPress={See}
-          onPress={() => {
-            See();
-            // go();
-            setAttendence(attendence + 0.01);
-          }}
+          onPress={See}
           style={{
             width: wd * 0.2,
             height: ht * 0.14,

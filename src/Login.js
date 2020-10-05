@@ -40,7 +40,7 @@ function Login({ navigation }) {
         // Do something with the results here
         alert("Successfully Login...");
         // console.log(result);
-        navigation.navigate("DrawerScreen");
+        navigation.navigate("Home");
       });
   };
 
@@ -135,6 +135,7 @@ function Login({ navigation }) {
               confirmCode();
             }
           }}
+          // onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.buttontext}>Submit OTP</Text>
         </TouchableOpacity>
