@@ -40,7 +40,7 @@ function Login({ navigation }) {
         // Do something with the results here
         alert("Successfully Login...");
         // console.log(result);
-        navigation.navigate("Home", { user: name });
+        navigation.navigate("DrawerScreen");
       });
   };
 

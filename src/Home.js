@@ -35,7 +35,14 @@ const wd = Dimensions.get("window").height;
 function Home({ route, navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  useEffect(() => {
+
+  const [region, setRegion] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.04,
+    longitudeDelta: 0.05,
+  });
+  const See = () => {
     if (Platform.OS === "android" && !Constants.isDevice) {
       setErrorMsg(
         "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
@@ -48,15 +55,36 @@ function Home({ route, navigation }) {
         }
 
         let location = await Location.getCurrentPositionAsync({
-          // accuracy: Location.Accuracy.Lowest,
+          accuracy: 1000,
         });
-        await setLocation(location);
-        console.log(location);
-        console.log(location.coords.latitude);
+        setLocation(location);
+        setRegion({
+          ...region,
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+        });
+        if (location.coords !== null) {
+          if (
+            (location.coords.latitude >= 17.438655 ||
+              location.coords.latitude <= 17.438719) &&
+            (location.coords.longitude >= 78.394564 ||
+              location.coords.longitude <= 78.39474)
+          ) {
+            alert("attence marked");
+          } else {
+            alert("Not in Range");
+          }
+        }
       })();
     }
-  });
-
+  };
+  // const go = () => {
+  //   setRegion({
+  //     ...region,
+  //     longitude: location.coords.longitude,
+  //     latitude: location.coords.latitude,
+  //   });
+  // };
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
@@ -87,30 +115,19 @@ function Home({ route, navigation }) {
       stroke: "#ffa726",
     },
   };
-  const [region, setRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
   const [dir, setDir] = useState(false);
 
   const onRegionChange = (region) => {
     setRegion({ region });
   };
-  console.log(region);
-  console.log(location);
-  // console.log(location.Object.latitude);
 
   return (
     <View>
       <StatusBar />
       {/* header bar starts */}
-      {/* <View style={styles.header}>
+      <View style={styles.header}>
         <View>
-          <TouchableOpacity
-          // onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-          >
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <AntDesign name="caretright" size={24} color="black" />
           </TouchableOpacity>
         </View>
@@ -126,7 +143,7 @@ function Home({ route, navigation }) {
             Home
           </Text>
         </View>
-      </View> */}
+      </View>
 
       {/* header bar ends */}
       {/* Attendence Starts */}
@@ -170,6 +187,7 @@ function Home({ route, navigation }) {
           style={[styles.map, { paddingBottom: 290 }]}
           showsUserLocation={true}
           followUserLocation={true}
+          zoomControlEnabled={true}
         >
           {/* <MapViewDirections
             origin={origin}
@@ -188,20 +206,11 @@ function Home({ route, navigation }) {
         style={{ position: "absolute", bottom: ht * 0.08, right: wd * 0.03 }}
       >
         <TouchableOpacity
+          // onPress={See}
           onPress={() => {
+            See();
+            // go();
             setAttendence(attendence + 0.01);
-            setRegion({ ...region, latitude: location.coords.latitude });
-            setRegion({ ...region, longitude: location.coords.longitude });
-            if (
-              (location.coords.latitude >= 17.438655 ||
-                location.coords.latitude <= 17.438719) &&
-              (location.coords.longitude >= 78.394564 ||
-                location.coords.longitude <= 78.39474)
-            ) {
-              alert("attence marked");
-            } else {
-              alert("Not in Range");
-            }
           }}
           style={{
             width: wd * 0.2,
@@ -240,6 +249,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: wd * 0.02,
+    zIndex: 3,
   },
   map: {
     width: wd * 0.52,
