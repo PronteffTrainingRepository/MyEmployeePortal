@@ -18,17 +18,35 @@ import * as Location from "expo-location";
 const ht = Dimensions.get("window").width;
 const wd = Dimensions.get("window").height;
 
-function Home({ navigation }) {
+function Home({ route, navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [attendence, setAttendence] = useState(0);
-
+  const { user } = route.params;
   const [region, setRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.04,
+    latitude: 28.6139,
+    longitude: 77.216721,
+    latitudeDelta: 0.06,
     longitudeDelta: 0.05,
   });
+  {
+    useEffect(() => {
+      (async () => {
+        let { status } = await Location.requestPermissionsAsync();
+        if (status !== "granted") {
+          setErrorMsg("Permission to access location was denied");
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        setRegion({
+          ...region,
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+        });
+      })();
+    }, []);
+  }
   const See = () => {
     if (Platform.OS === "android" && !Constants.isDevice) {
       setErrorMsg(
@@ -52,13 +70,13 @@ function Home({ navigation }) {
         });
         if (location.coords !== null) {
           if (
-            (location.coords.latitude >= 17.43873 ||
-              location.coords.latitude <= 17.43877) &&
-            (location.coords.longitude >= 78.39461 ||
-              location.coords.longitude <= 78.39469)
+            location.coords.latitude >= 17.4387501 &&
+            location.coords.latitude <= 17.4387799 &&
+            location.coords.longitude >= 78.3946201 &&
+            location.coords.longitude <= 78.3946299
           ) {
             alert("attence marked");
-            setAttendence(attendence + 0.01);
+            setAttendence(attendence + 1);
             navigation.navigate("Sheet");
           } else {
             alert("Not in Range");
@@ -68,10 +86,12 @@ function Home({ navigation }) {
     }
   };
   let text = "Waiting..";
+  let text1 = "Me too Waiting";
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
-    text = JSON.stringify(location);
+    text = JSON.stringify(location.coords.latitude);
+    text1 = JSON.stringify(location.coords.longitude);
   }
   const data = {
     // labels: ["Swim", "Bike", "Run"], // optional
@@ -102,12 +122,13 @@ function Home({ navigation }) {
   };
 
   return (
-    <View>
+    <View style={{ backgroundColor: "yellow" }}>
       <StatusBar />
+
       {/* header bar starts */}
       <View style={styles.header}>
         <View>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <TouchableOpacity>
             <AntDesign name="caretright" size={24} color="black" />
           </TouchableOpacity>
         </View>
@@ -127,25 +148,46 @@ function Home({ navigation }) {
 
       {/* header bar ends */}
       {/* Attendence Starts */}
-      <View style={{ alignItems: "center", marginBottom: 10 }}>
+      <View style={{ alignItems: "center", marginBottom: 0 }}>
+        <View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: ht * 0.06,
+              paddingTop: ht * 0.03,
+            }}
+          >
+            Attendence
+          </Text>
+        </View>
         <View
           style={{
             backgroundColor: "white",
             width: wd * 0.5,
-            height: ht * 0.46,
+            height: ht * 0.4,
             marginTop: 2,
             borderRadius: ht * 0.03,
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          <View style={{ alignItems: "center" }}>
-            <Text>Attendence</Text>
-            <Text>Hi user, Your Attenece till Now is..</Text>
-            <Text>
-              Your {Attendence} Percentage is {attendence} %
+          <View style={{ alignItems: "center", flex: 2 }}>
+            <Text style={{ fontWeight: "bold" }}>
+              Hi {user}, Your Attenece till Now is..
             </Text>
-            {/* <Text>location :{text}</Text> */}
+            <Text style={{ fontWeight: "bold" }}>
+              Your Attendence for Today is {attendence * 100} %
+            </Text>
+            <Text style={{ fontWeight: "bold" }}>Latitude :{text}</Text>
+            <Text style={{ fontWeight: "bold" }}>Longitude : {text1}</Text>
           </View>
-          <View style={{ alignItems: "flex-end", borderRadius: ht * 0.2 }}>
+          <View
+            style={{
+              alignItems: "center",
+              borderRadius: ht * 0.2,
+              flex: 1,
+            }}
+          >
             <ProgressChart
               data={data}
               width={wd * 0.12}
@@ -161,22 +203,22 @@ function Home({ navigation }) {
       </View>
       {/* Attendence Ends */}
       {/* Map starts */}
-      <View>
+      <View style={{ marginBottom: ht * 0.6 }}>
         <MapView
           provider="google"
           region={region}
           onRegionChange={onRegionChange}
-          style={[styles.map, { paddingBottom: 290 }]}
+          style={styles.map}
           showsUserLocation={true}
           followUserLocation={true}
           zoomControlEnabled={true}
-        >
-        </MapView>
+        ></MapView>
       </View>
+
       {/* Map Ends */}
       {/* Attendence Button Starts */}
       <View
-        style={{ position: "absolute", bottom: ht * 0.08, right: wd * 0.03 }}
+        style={{ position: "absolute", bottom: ht * 0.7, right: wd * 0.04 }}
       >
         <TouchableOpacity
           onPress={See}
@@ -221,6 +263,6 @@ const styles = StyleSheet.create({
   },
   map: {
     width: wd * 0.52,
-    height: ht * 1.3,
+    height: ht * 1.25,
   },
 });

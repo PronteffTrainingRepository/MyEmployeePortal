@@ -22,7 +22,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "1.0.0",
+    "description": "1.0.1",
     "githubUrl": "https://github.com/PronteffTrainingRepository/MyEmployeePortal"
   }
 }

@@ -48,7 +48,7 @@ function Sheet() {
       <ScrollView>
         {mark.map((item) => (
           <View key={item.id} style={styles.item}>
-            <Text style={styles.record}>{item.id}</Text>
+            <Text style={styles.record}>{item.id + 1}</Text>
             <Text style={styles.record}>{item.value}</Text>
           </View>
         ))}

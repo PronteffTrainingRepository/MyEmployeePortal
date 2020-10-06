@@ -40,7 +40,7 @@ function Login({ navigation }) {
         // Do something with the results here
         alert("Successfully Login...");
         // console.log(result);
-        navigation.navigate("Home");
+        navigation.navigate("Home", { user: name });
       });
   };
 
@@ -135,7 +135,7 @@ function Login({ navigation }) {
               confirmCode();
             }
           }}
-          // onPress={() => navigation.navigate("Home")}
+          // onPress={() => navigation.navigate("Home", { user: name })}
         >
           <Text style={styles.buttontext}>Submit OTP</Text>
         </TouchableOpacity>
