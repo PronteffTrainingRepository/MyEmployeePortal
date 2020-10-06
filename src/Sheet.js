@@ -13,7 +13,6 @@ const wd = Dimensions.get("window").height;
 function Sheet() {
   const [mark, setMark] = useState([]);
 
-  // const setDates = () => {};
 
   useEffect(() => {
     setMark([
@@ -61,7 +60,7 @@ export default Sheet;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "black",
+    backgroundColor: "grey",
     flex: 1,
   },
   item: {
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
     paddingRight: wd * 0.02,
     paddingTop: ht * 0.03,
     backgroundColor: "tomato",
-    borderColor: "black",
+    borderColor: "white",
     borderWidth: wd * 0.002,
     height: ht * 0.14,
   },

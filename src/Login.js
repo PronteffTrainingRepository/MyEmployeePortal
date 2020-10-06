@@ -124,18 +124,18 @@ function Login({ navigation }) {
       <View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            if (no == "") {
-              alert("Enter Phone number First...");
-            } else if (code == "") {
-              alert("OTP Field is Empty...");
-            } else if (name == "") {
-              alert("please Enter Your Name");
-            } else {
-              confirmCode();
-            }
-          }}
-          // onPress={() => navigation.navigate("Home", { user: name })}
+          // onPress={() => {
+          //   if (no == "") {
+          //     alert("Enter Phone number First...");
+          //   } else if (code == "") {
+          //     alert("OTP Field is Empty...");
+          //   } else if (name == "") {
+          //     alert("please Enter Your Name");
+          //   } else {
+          //     confirmCode();
+          //   }
+          // }}
+          onPress={() => navigation.navigate("Home", { user: name })}
         >
           <Text style={styles.buttontext}>Submit OTP</Text>
         </TouchableOpacity>

@@ -21,7 +21,7 @@ function Home({ route, navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [attendence, setAttendence] = useState(0);
-  const { user } = route.params;
+  //   const { user } = route.params;
   const [region, setRegion] = useState({
     latitude: 28.6139,
     longitude: 77.216721,
@@ -84,7 +84,7 @@ function Home({ route, navigation }) {
           ) {
             alert("attence marked");
             setAttendence(1);
-            navigation.navigate("Sheet");
+            // navigation.navigate("Sheet");
           } else {
             alert("Not in Range");
           }
@@ -122,12 +122,27 @@ function Home({ route, navigation }) {
       stroke: "#ffa726",
     },
   };
-  const [dir, setDir] = useState(false);
 
-  // const onRegionChange = (region) => {
-  //   setRegion({ region });
-  // };
-
+const getDirections = async (startLoc, destinationLoc) => {
+  try {
+    const KEY = "AIzaSyDu9M5hxGv8SAvBjg7TUstCQI_IfaQ1a0c";
+    let resp = await fetch(
+      `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
+    );
+    let respJson = await resp.json();
+    let points = decode(respJson.routes[0].overview_polyline.points);
+    console.log(points);
+    let coords = points.map((point, index) => {
+      return {
+        latitude: point[0],
+        longitude: point[1],
+      };
+    });
+    return coords;
+  } catch (error) {
+    return error;
+  }
+};
   return (
     <View style={{ backgroundColor: "yellow" }}>
       <StatusBar />
@@ -180,10 +195,10 @@ function Home({ route, navigation }) {
         >
           <View style={{ alignItems: "center", flex: 2 }}>
             <Text style={{ fontWeight: "bold" }}>
-              Hi {user}, Your Attenece till Now is..
+              {/* Hi {user}, Your Attenece till Now is.. */}
             </Text>
             <Text style={{ fontWeight: "bold" }}>
-              Your Attendence for Today is{" "}
+              Your Attendence for Today is
               {attendence == 1 ? attendence * 100 : 0} %
             </Text>
             <Text style={{ fontWeight: "bold" }}>Latitude :{text}</Text>
