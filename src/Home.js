@@ -21,7 +21,11 @@ function Home({ route, navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [attendence, setAttendence] = useState(0);
+  const [graph, setGraph] = useState(0);
   const { user } = route.params;
+  const { total } = route.params;
+  const { naam } = route.params;
+  const { countvalue } = route.params;
   const [region, setRegion] = useState({
     latitude: 28.6139,
     longitude: 77.216721,
@@ -39,7 +43,9 @@ function Home({ route, navigation }) {
         setErrorMsg("Permission to access location was denied");
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+      });
       setLocation(location);
       setRegion({
         ...region,
@@ -54,6 +60,12 @@ function Home({ route, navigation }) {
     })();
   }, []);
 
+  useEffect(() => {
+    if (countvalue) {
+      setGraph(countvalue / 60);
+    }
+  }, [countvalue]);
+
   const See = () => {
     if (Platform.OS === "android" && !Constants.isDevice) {
       setErrorMsg(
@@ -67,7 +79,7 @@ function Home({ route, navigation }) {
         }
 
         let location = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.High,
+          enableHighAccuracy: true,
         });
         setLocation(location);
         setRegion({
@@ -82,9 +94,9 @@ function Home({ route, navigation }) {
             location.coords.longitude >= 78.3946001 &&
             location.coords.longitude <= 78.3946999
           ) {
-            alert("attence marked");
+            // alert("attence marked");
             setAttendence(1);
-            navigation.navigate("Sheet");
+            navigation.navigate("WorkTime");
           } else {
             alert("Not in Range");
           }
@@ -102,7 +114,7 @@ function Home({ route, navigation }) {
   }
   const data = {
     // labels: ["Swim", "Bike", "Run"], // optional
-    data: [attendence],
+    data: [graph],
   };
 
   const chartConfig = {
@@ -122,20 +134,19 @@ function Home({ route, navigation }) {
       stroke: "#ffa726",
     },
   };
-  const [dir, setDir] = useState(false);
 
   // const onRegionChange = (region) => {
   //   setRegion({ region });
   // };
 
   return (
-    <View style={{ backgroundColor: "yellow" }}>
+    <View style={{ backgroundColor: "purple" }}>
       <StatusBar />
 
       {/* header bar starts */}
       <View style={styles.header}>
         <View>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <TouchableOpacity>
             <AntDesign name="caretright" size={24} color="black" />
           </TouchableOpacity>
         </View>
@@ -162,6 +173,7 @@ function Home({ route, navigation }) {
               fontWeight: "bold",
               fontSize: ht * 0.06,
               paddingTop: ht * 0.03,
+              color: "white",
             }}
           >
             Attendence
@@ -180,14 +192,19 @@ function Home({ route, navigation }) {
         >
           <View style={{ alignItems: "center", flex: 2 }}>
             <Text style={{ fontWeight: "bold" }}>
-              Hi {user}, Your Attenece till Now is..
+              Hi {user} {naam}, Your Attenece till Now is..
             </Text>
-            <Text style={{ fontWeight: "bold" }}>
-              Your Attendence for Today is{" "}
+            {/* <Text style={{ fontWeight: "bold" }}>
+              Your Attendence for Today is
               {attendence == 1 ? attendence * 100 : 0} %
+            </Text> */}
+            <Text style={{ fontWeight: "bold" }}>
+              Your Attendence Time for Today is {graph * 60} Secs
             </Text>
             <Text style={{ fontWeight: "bold" }}>Latitude :{text}</Text>
             <Text style={{ fontWeight: "bold" }}>Longitude : {text1}</Text>
+            {/* <Text>total time is :{total}</Text> */}
+            {/* <Text>total count is :{countvalue}</Text> */}
           </View>
           <View
             style={{
@@ -233,7 +250,8 @@ function Home({ route, navigation }) {
         style={{ position: "absolute", bottom: ht * 0.7, right: wd * 0.04 }}
       >
         <TouchableOpacity
-          onPress={See}
+          // onPress={See}
+          onPress={() => navigation.navigate("WorkTime")}
           style={{
             width: wd * 0.2,
             height: ht * 0.14,
