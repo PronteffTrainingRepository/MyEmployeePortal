@@ -23,7 +23,6 @@ function Home({ route, navigation }) {
   const [attendence, setAttendence] = useState(0);
   const [graph, setGraph] = useState(0);
   const { user } = route.params;
-  const { total } = route.params;
   const { naam } = route.params;
   const { countvalue } = route.params;
   const [region, setRegion] = useState({
@@ -36,35 +35,73 @@ function Home({ route, navigation }) {
     latitude: 28.6139,
     longitude: 77.216721,
   });
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-      }
 
-      let location = await Location.getCurrentPositionAsync({
-        enableHighAccuracy: true,
-      });
-      setLocation(location);
-      setRegion({
-        ...region,
-        longitude: location.coords.longitude,
-        latitude: location.coords.latitude,
-      });
-      setCoordinates({
-        ...coordinates,
-        longitude: location.coords.longitude,
-        latitude: location.coords.latitude,
-      });
-    })();
+  const watch = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+    }
+
+    let location = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true,
+    });
+    setLocation(location);
+    setRegion({
+      ...region,
+      longitude: location.coords.longitude,
+      latitude: location.coords.latitude,
+    });
+    setCoordinates({
+      ...coordinates,
+      longitude: location.coords.longitude,
+      latitude: location.coords.latitude,
+    });
+  };
+
+  useEffect(() => {
+    if (Platform.OS === "android" && !Constants.isDevice) {
+      setErrorMsg(
+        "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
+      );
+    } else {
+      watch();
+    }
   }, []);
 
   useEffect(() => {
     if (countvalue) {
-      setGraph(countvalue / 60);
+      setGraph(countvalue / 600);
     }
   }, [countvalue]);
+
+  const watch1 = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+    }
+
+    let location = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true,
+    });
+    setLocation(location);
+    setRegion({
+      ...region,
+      longitude: location.coords.longitude,
+      latitude: location.coords.latitude,
+    });
+    if (location.coords !== null) {
+      if (
+        location.coords.latitude >= 17.4387001 &&
+        location.coords.latitude <= 17.4387999 &&
+        location.coords.longitude >= 78.3946001 &&
+        location.coords.longitude <= 78.3946999
+      ) {
+        navigation.navigate("WorkTime");
+      } else {
+        alert("Not in Range");
+      }
+    }
+  };
 
   const See = () => {
     if (Platform.OS === "android" && !Constants.isDevice) {
@@ -72,36 +109,7 @@ function Home({ route, navigation }) {
         "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
       );
     } else {
-      (async () => {
-        let { status } = await Location.requestPermissionsAsync();
-        if (status !== "granted") {
-          setErrorMsg("Permission to access location was denied");
-        }
-
-        let location = await Location.getCurrentPositionAsync({
-          enableHighAccuracy: true,
-        });
-        setLocation(location);
-        setRegion({
-          ...region,
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude,
-        });
-        if (location.coords !== null) {
-          if (
-            location.coords.latitude >= 17.4387001 &&
-            location.coords.latitude <= 17.4387999 &&
-            location.coords.longitude >= 78.3946001 &&
-            location.coords.longitude <= 78.3946999
-          ) {
-            // alert("attence marked");
-            setAttendence(1);
-            navigation.navigate("WorkTime");
-          } else {
-            alert("Not in Range");
-          }
-        }
-      })();
+      watch1();
     }
   };
   let text = "Waiting..";
@@ -199,7 +207,7 @@ function Home({ route, navigation }) {
               {attendence == 1 ? attendence * 100 : 0} %
             </Text> */}
             <Text style={{ fontWeight: "bold" }}>
-              Your Attendence Time for Today is {graph * 60} Secs
+              Your Attendence Time for Today is {graph * 600} Secs
             </Text>
             <Text style={{ fontWeight: "bold" }}>Latitude :{text}</Text>
             <Text style={{ fontWeight: "bold" }}>Longitude : {text1}</Text>

@@ -8,6 +8,7 @@ import Map from "./src/Map";
 import Map2 from "./src/Map2";
 import Login1 from "./src/Login1";
 import WorkTime from "./src/WorkTime";
+import Timer from "./src/Timer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -20,7 +21,8 @@ export default function App() {
     //   {/* <Home /> */}
     //   {/* <Map2 /> */}
     //   {/* <Login1 /> */}
-    //   <WorkTime />
+    //   {/* <WorkTime /> */}
+    //   <Timer />
     // </View>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login1">

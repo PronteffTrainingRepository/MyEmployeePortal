@@ -19,36 +19,48 @@ const wd = Dimensions.get("window").width;
 
 function WorkTime({ navigation }) {
   const [submit, setSubmit] = useState(true);
-  const [times, getUserTime] = useState(0);
   const [count, setCount] = useState(0);
-
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [sec, setSec] = useState(0);
+  const [min, setMin] = useState(0);
+  const [hour, setHour] = useState(0);
+  const [extra1, setExtra1] = useState(0);
+  const [extra2, setExtra2] = useState(0);
+  const [extra3, setExtra3] = useState(0);
+
+  const watch = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+    }
+    let location = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true,
+    });
+    setLocation(location);
+    if (location.coords !== null) {
+      if (
+        location.coords.latitude >= 17.4387001 &&
+        location.coords.latitude <= 17.4387999 &&
+        location.coords.longitude >= 78.3946001 &&
+        location.coords.longitude <= 78.3946999
+      ) {
+        null;
+      } else {
+        alert("not in range");
+        navigation.navigate("Home", {  countvalue: count });
+      }
+    }
+  };
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-      }
-      let location = await Location.getCurrentPositionAsync({
-        enableHighAccuracy: true,
-      });
-      setLocation(location);
-      if (location.coords !== null) {
-        if (
-          location.coords.latitude >= 17.4387001 &&
-          location.coords.latitude <= 17.4387999 &&
-          location.coords.longitude >= 78.3946001 &&
-          location.coords.longitude <= 78.3946999
-        ) {
-          null;
-        } else {
-          alert("not in range");
-          navigation.navigate("Home", { total: times, countvalue: count });
-        }
-      }
-    })();
+    if (Platform.OS === "android" && !Constants.isDevice) {
+      setErrorMsg(
+        "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
+      );
+    } else {
+      watch();
+    }
   }, [count]);
   let text = "Waiting..";
   let text1 = "Me too Waiting";
@@ -62,17 +74,50 @@ function WorkTime({ navigation }) {
     BackHandler.addEventListener("hardwareBackPress", function () {
       return true;
     });
-    // return () => BackHandler.removeEventListener();
+    return () => BackHandler.removeEventListener();
   }, []);
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCount(count + 1);
-    }, 1000);
+    const interval = setInterval(set, 1000);
     return () => clearInterval(interval);
-  }, [count]);
-  const getFormattedTime = (time) => {
-    getUserTime(time);
+  }, []);
+  const set = () => {
+    setCount((count) => count + 1);
   };
+  useEffect(() => {
+    const interval = setInterval(sets, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+  const sets = () => {
+    setSec((sec) => sec + 1);
+  };
+  useEffect(() => {
+    if (sec > 59) {
+      setSec(0);
+      setMin((min) => min + 1);
+    }
+    if (min > 59) {
+      setMin(0);
+      setHour((hour) => hour + 1);
+    }
+    if (sec < 10) {
+      setExtra1(0);
+    } else {
+      setExtra1("");
+    }
+    if (min < 10) {
+      setExtra2(0);
+    } else {
+      setExtra2("");
+    }
+    if (hour < 10) {
+      setExtra3(0);
+    } else {
+      setExtra3("");
+    }
+  }, [sec]);
   return (
     <View style={styles.container}>
       <StatusBar />
@@ -98,14 +143,14 @@ function WorkTime({ navigation }) {
       {/* Heading Ends */}
       {/* Timer Starts */}
       <View>
-        <Stopwatch
-          laps
-          secs
-          start={submit}
-          reset={false}
-          //   options={options}
-          getTime={getFormattedTime}
-        />
+        <View style={styles.clock}>
+          <Text style={styles.clockTime}>
+            {extra3}
+            {hour}:{extra2}
+            {min}:{extra1}
+            {sec}
+          </Text>
+        </View>
       </View>
       {/* Timer Ends */}
       {/* Done for the Day Starts */}
@@ -113,7 +158,7 @@ function WorkTime({ navigation }) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate("Home", { total: times, countvalue: count });
+            navigation.navigate("Home", {  countvalue: count });
           }}
         >
           <Text style={styles.buttontext}>Done For the Day</Text>
@@ -152,6 +197,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
     height: ht * 0.06,
+    fontWeight: "bold",
+    fontSize: ht * 0.04,
+  },
+  clock: {
+    backgroundColor: "red",
+    alignItems: "center",
+    width: wd * 0.5,
+    height: ht * 0.1,
+    justifyContent: "center",
+    borderRadius: ht * 0.01,
+  },
+  clockTime: {
+    color: "white",
     fontWeight: "bold",
     fontSize: ht * 0.04,
   },

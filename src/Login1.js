@@ -126,7 +126,7 @@ function Login1({ navigation }) {
         <View style={{ alignItems: "center", marginTop: ht * 0.02 }}>
           <TouchableOpacity
             style={styles.button}
-           // onPress={() => alert(`${name} and ${username} and ${password}`)}
+          //  onPress={() => alert(`${name} and ${username} and ${password}`)}
             onPress={() => {
               if (name == "") {
                 alert("Name Feild Can Not Be Empty");
