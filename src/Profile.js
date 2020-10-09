@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,12 +8,45 @@ import {
   Image,
   ScrollView,
   TextInput,
+  Platform,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+import { Fontisto } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
 function Profile() {
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const {
+          status,
+        } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
   return (
     <View>
       {/* <StatusBar /> */}
@@ -27,6 +60,13 @@ function Profile() {
             source={require("../assets/person.jpg")}
           />
           <View style={styles.wallpapercover}></View>
+          <View
+            style={{ position: "absolute", top: ht * 0.25, left: wd * 0.89 }}
+          >
+            <TouchableOpacity>
+              <Fontisto name="camera" size={24} color="silver" />
+            </TouchableOpacity>
+          </View>
         </View>
         {/* Wallpicture Ends */}
 
@@ -49,7 +89,9 @@ function Profile() {
             <Text style={{ fontWeight: "bold", fontSize: ht * 0.02 }}>
               AVLIN THOMUS
             </Text>
-            <Text style={{}}>Network</Text>
+            <Text style={{ color: "grey", paddingLeft: wd * 0.07 }}>
+              Network
+            </Text>
           </View>
           {/* Name Ends */}
         </View>
@@ -96,6 +138,13 @@ function Profile() {
             <TextInput style={styles.input} />
           </View>
           {/* Mobile Number Ends */}
+          {/* Change Password Starts */}
+          <View style={styles.buttonview}>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttontext}>Change Password</Text>
+            </TouchableOpacity>
+          </View>
+          {/* Change Password Ends */}
         </ScrollView>
       </View>
       {/* Scroll Ends */}
@@ -134,8 +183,27 @@ const styles = StyleSheet.create({
   inputtitle: {
     color: "#9061A8",
     paddingTop: ht * 0.02,
+    fontWeight: "bold",
+    marginBottom: ht * 0.005,
   },
   section: {
     paddingLeft: wd * 0.06,
+  },
+  buttonview: {
+    alignItems: "center",
+    marginTop: ht * 0.04,
+  },
+  button: {
+    backgroundColor: "#9061A8",
+    width: wd * 0.45,
+    height: ht * 0.05,
+    borderRadius: ht * 0.02,
+  },
+  buttontext: {
+    color: "white",
+    textAlign: "center",
+    height: ht * 0.05,
+    textAlignVertical: "center",
+    fontWeight: "bold",
   },
 });
