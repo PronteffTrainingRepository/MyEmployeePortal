@@ -1,0 +1,36 @@
+   {/* name starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>Name</Text>
+            <TextInput style={styles.input} />
+          </View>
+          {/* name Ends */}
+          {/* Emp id starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>EmpID</Text>
+            <TextInput style={styles.input} />
+          </View>
+          {/* Emp id Ends */}
+          {/* designation starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>Designation</Text>
+            <TextInput style={styles.input} />
+          </View>
+          {/* designation Ends */}
+          {/* Company's Email starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>Company's Email</Text>
+            <TextInput style={styles.input} />
+          </View>
+          {/* Company's Email Ends */}
+          {/* Personal Email starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>Personal Email</Text>
+            <TextInput style={styles.input} />
+          </View>
+          {/* Personla Email Ends */}
+          {/* Mobile number starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>Mobile Number</Text>
+            <TextInput style={styles.input} />
+          </View>
+          {/* Mobile Number Ends */}

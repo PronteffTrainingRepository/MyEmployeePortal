@@ -8,7 +8,10 @@ import Map from "./src/Map";
 import Map2 from "./src/Map2";
 import Login1 from "./src/Login1";
 import WorkTime from "./src/WorkTime";
+import Leave from "./src/Leave";
+import Calendar from "./src/Calendar";
 import Timer from "./src/Timer";
+import Profile from "./src/Profile";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -17,42 +20,45 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    // <View style={styles.container}>
-    //   {/* <Home /> */}
-    //   {/* <Map2 /> */}
-    //   {/* <Login1 /> */}
-    //   {/* <WorkTime /> */}
-    //   <Timer />
-    // </View>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login1">
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login1"
-          component={Login1}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="WorkTime"
-          component={WorkTime}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Sheet"
-          component={Sheet}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      {/* <Home /> */}
+      {/* <Map2 /> */}
+      {/* <Login1 /> */}
+      {/* <WorkTime /> */}
+      {/* <Timer /> */}
+      {/* <Leave /> */}
+      {/* <Calendar /> */}
+      <Profile />
+    </View>
+    // <NavigationContainer>
+    //   <Stack.Navigator initialRouteName="Login1">
+    //     <Stack.Screen
+    //       name="Login"
+    //       component={Login}
+    //       options={{ headerShown: false }}
+    //     />
+    //     <Stack.Screen
+    //       name="Login1"
+    //       component={Login1}
+    //       options={{ headerShown: false }}
+    //     />
+    //     <Stack.Screen
+    //       name="Home"
+    //       component={Home}
+    //       options={{ headerShown: false }}
+    //     />
+    //     <Stack.Screen
+    //       name="WorkTime"
+    //       component={WorkTime}
+    //       options={{ headerShown: false }}
+    //     />
+    //     <Stack.Screen
+    //       name="Sheet"
+    //       component={Sheet}
+    //       options={{ headerShown: false }}
+    //     />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
   );
 }
 
