@@ -23,12 +23,12 @@ export default function App() {
     <View style={styles.container}>
       {/* <Home /> */}
       {/* <Map2 /> */}
-      {/* <Login1 /> */}
+      <Login1 />
       {/* <WorkTime /> */}
       {/* <Timer /> */}
       {/* <Leave /> */}
       {/* <Calendar /> */}
-      <Profile />
+      {/* <Profile /> */}
     </View>
     // <NavigationContainer>
     //   <Stack.Navigator initialRouteName="Login1">
