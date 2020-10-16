@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -13,21 +13,17 @@ import {
 import { Stopwatch } from "react-native-stopwatch-timer";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
+import { log } from "react-native-reanimated";
 
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
-function WorkTime({ navigation }) {
-  const [submit, setSubmit] = useState(true);
-  const [count, setCount] = useState(0);
+function WorkTime({ navigation: { navigate } }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [sec, setSec] = useState(0);
-  const [min, setMin] = useState(0);
-  const [hour, setHour] = useState(0);
-  const [extra1, setExtra1] = useState(0);
-  const [extra2, setExtra2] = useState(0);
-  const [extra3, setExtra3] = useState(0);
+  const [start, setStart] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [total, setTotal] = useState();
 
   const watch = async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -45,10 +41,10 @@ function WorkTime({ navigation }) {
         location.coords.longitude >= 78.3946001 &&
         location.coords.longitude <= 78.3946999
       ) {
-        null;
+        setStart(true);
       } else {
         alert("not in range");
-        navigation.navigate("Home", {  countvalue: count });
+        navigate("Sheet", { countvalue2: total });
       }
     }
   };
@@ -61,7 +57,7 @@ function WorkTime({ navigation }) {
     } else {
       watch();
     }
-  }, [count]);
+  }, [total]);
   let text = "Waiting..";
   let text1 = "Me too Waiting";
   if (errorMsg) {
@@ -70,54 +66,15 @@ function WorkTime({ navigation }) {
     text = JSON.stringify(location.coords.latitude);
     text1 = JSON.stringify(location.coords.longitude);
   }
+
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", function () {
       return true;
     });
     return () => BackHandler.removeEventListener();
   }, []);
-
-  useEffect(() => {
-    const interval = setInterval(set, 1000);
-    return () => clearInterval(interval);
-  }, []);
-  const set = () => {
-    setCount((count) => count + 1);
-  };
-  useEffect(() => {
-    const interval = setInterval(sets, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  const sets = () => {
-    setSec((sec) => sec + 1);
-  };
-  useEffect(() => {
-    if (sec > 59) {
-      setSec(0);
-      setMin((min) => min + 1);
-    }
-    if (min > 59) {
-      setMin(0);
-      setHour((hour) => hour + 1);
-    }
-    if (sec < 10) {
-      setExtra1(0);
-    } else {
-      setExtra1("");
-    }
-    if (min < 10) {
-      setExtra2(0);
-    } else {
-      setExtra2("");
-    }
-    if (hour < 10) {
-      setExtra3(0);
-    } else {
-      setExtra3("");
-    }
-  }, [sec]);
+  console.log(total);
+  const rrref = useRef();
   return (
     <View style={styles.container}>
       <StatusBar />
@@ -141,25 +98,29 @@ function WorkTime({ navigation }) {
         </Text>
       </View>
       {/* Heading Ends */}
-      {/* Timer Starts */}
-      <View>
-        <View style={styles.clock}>
-          <Text style={styles.clockTime}>
-            {extra3}
-            {hour}:{extra2}
-            {min}:{extra1}
-            {sec}
-          </Text>
-        </View>
-      </View>
-      {/* Timer Ends */}
+      {/*  Timer Starts */}
+      <Stopwatch
+        ref={rrref}
+        start={start}
+        // reset={reset}
+        // options={options}
+        getTime={(time) => {
+          setTotal(time);
+        }}
+        getMsecs={(time) => console.log(time / 100)}
+        // getMsecs={(time) => {
+        //   if (start == false) {
+        //     setTotal(time);
+        //   }
+        // }}
+      />
+      <Text>{total}</Text>
+      {/*  Timer Ends */}
       {/* Done for the Day Starts */}
       <View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            navigation.navigate("Home", {  countvalue: count });
-          }}
+          onPress={() => navigate("Sheet", { countvalue1: total })}
         >
           <Text style={styles.buttontext}>Done For the Day</Text>
         </TouchableOpacity>

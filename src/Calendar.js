@@ -1,38 +1,61 @@
-import React from "react";
-import { View, Text, StyleSheet, Dimensions, StatusBar } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  StatusBar,
+  Animated,
+} from "react-native";
+import {
+  ScrollView,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
+import DropdownAlert from "react-native-dropdownalert";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 function Calendar() {
+  const [dropdown, setDropDown] = useState();
+  const itemAction = (item) => {
+    switch (item.type) {
+      case "close":
+        closeAction();
+        break;
+      default:
+        const title = item.type;
+        Image.propTypes.style = { width: 100, height: 100 };
+        dropdown.alertWithType(item.type, title, item.message, item.imageSrc);
+    }
+  };
+  const handleClose = (data) => {
+    console.log(data);
+  };
+  const handleCancel = (data) => {
+    console.log(data);
+  };
   return (
     <View style={styles.container}>
-      <StatusBar />
-      {/* header starts */}
-      <View
-        style={{ backgroundColor: "#FC9600", height: ht * 0.08, elevation: 5 }}
-      >
-        <Text
-          style={{
-            color: "white",
-            textAlign: "center",
-            textAlignVertical: "center",
-            height: ht * 0.08,
-            fontWeight: "700",
-            fontSize: ht * 0.04,
-          }}
-        >
-          Pronteff Holidays
-        </Text>
-      </View>
-      {/* header ends */}
-
+      <StatusBar barStyle="light-content" backgroundColor="#022169" />
       {/* Holidays lists starts */}
       <View style={styles.scroll}>
         <ScrollView>
           {/* 1 starts */}
           <View style={[styles.section, { backgroundColor: "#F33939" }]}>
-            <Text style={styles.holidayname}>New Year</Text>
-            <Text style={styles.holidaytime}>January 1, Wednesday</Text>
+            <TouchableOpacity
+              onPress={() =>
+                itemAction({
+                  type: "error",
+                  message: "hello",
+                  title: "hello",
+                  imageSrc: "../assets/person.jpg",
+                  imageStyle: { width: 100, height: 100 },
+                })
+              }
+            >
+              <Text style={styles.holidayname}>New Year</Text>
+              <Text style={styles.holidaytime}>January 1, Wednesday</Text>
+            </TouchableOpacity>
           </View>
           {/* 1 ends */}
           {/* 2 starts */}
@@ -97,6 +120,15 @@ function Calendar() {
         </ScrollView>
       </View>
       {/* Holiday lists ends */}
+      <DropdownAlert
+        ref={(ref) => setDropDown(ref)}
+        showCancel={true}
+        onClose={(data) => handleClose(data)}
+        onCancel={(data) => handleCancel(data)}
+        //  imageSrc={"../"}
+
+        imageStyle={{ width: 200, height: 200, backgroundColor: "red" }}
+      />
     </View>
   );
 }
@@ -106,6 +138,7 @@ export default Calendar;
 const styles = StyleSheet.create({
   scroll: {
     alignItems: "center",
+    marginBottom: ht * 0.13,
   },
   section: {
     width: wd * 0.95,

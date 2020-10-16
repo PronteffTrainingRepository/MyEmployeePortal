@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -13,19 +13,19 @@ import {
   Platform,
   Picker,
 } from "react-native";
-import { Fontisto } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
+
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Entypo } from "@expo/vector-icons";
+
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
-function Leave() {
+function NewLeave() {
   const [description, setDescription] = useState("");
   const [datefrom, setDateFrom] = useState("");
   const [dateto, setDateTo] = useState("");
   const [selectedValue, setSelectedValue] = useState("Sick");
-  const [selectedValue1, setSelectedValue1] = useState("0");
+  const [selectedValue1, setSelectedValue1] = useState(0);
 
   const keyboardVerticalOffset =
     Platform.OS === "android" ? ht * 0.2 : -ht * 0.1;
@@ -33,10 +33,12 @@ function Leave() {
   const [date, setDate] = useState(new Date());
   const [date1, setDate1] = useState(new Date());
   const [show, setShow] = useState(false);
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+    setDateTo(selectedDate);
   };
 
   return (
@@ -110,11 +112,11 @@ function Leave() {
                     setSelectedValue1(itemValue)
                   }
                 >
-                  <Picker.Item label="0" value="0" />
-                  <Picker.Item label="1" value="1" />
-                  <Picker.Item label="2" value="2" />
-                  <Picker.Item label="3" value="3" />
-                  <Picker.Item label="4" value="4" />
+                  <Picker.Item label="0" value={0} />
+                  <Picker.Item label="1" value={1} />
+                  <Picker.Item label="2" value={2} />
+                  <Picker.Item label="3" value={3} />
+                  <Picker.Item label="4" value={4} />
                 </Picker>
               </View>
             </View>
@@ -147,6 +149,7 @@ function Leave() {
                   }
                   editable={false}
                 />
+                {console.log("inside component date", date)}
                 {show && (
                   <DateTimePicker
                     testID="dateTimePicker"
@@ -193,7 +196,7 @@ function Leave() {
                   }
                   editable={false}
                 />
-
+                {console.log("inside component dateto", date)}
                 <View
                   style={{
                     position: "absolute",
@@ -246,11 +249,11 @@ function Leave() {
   );
 }
 
-export default Leave;
+export default NewLeave;
 
 const styles = StyleSheet.create({
   conatiner: {
-    // flex: 1,expo
+    // flex: 1,
     backgroundColor: "white",
     // alignItems: "center",
     height: ht * 1,

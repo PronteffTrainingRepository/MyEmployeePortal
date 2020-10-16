@@ -11,12 +11,10 @@ import {
 
 const ht = Dimensions.get("window").width;
 const wd = Dimensions.get("window").height;
-function Sheet({ route, navigation }) {
+function Sheet1({ navigation }) {
   const [mark, setMark] = useState([]);
   const [self, setSelf] = useState("Nil");
 
-  const { countvalue1 } = route.params;
-  const { countvalue2 } = route.params;
   useEffect(() => {
     setMark([
       ...mark,
@@ -31,47 +29,9 @@ function Sheet({ route, navigation }) {
       },
     ]);
   }, []);
-  useEffect(() => {
-    if (countvalue1) {
-      setSelf(countvalue1);
-    } else if (countvalue2) {
-      setSelf(countvalue2);
-    }
-    if (countvalue1) {
-      Alert.alert("Attendence Marked", "Go to Home", [
-        { text: "OK", onPress: () => navigation.navigate("Main") },
-      ]);
-    } else if (countvalue2) {
-      Alert.alert("Out of range", "Go to Home", [
-        { text: "OK", onPress: () => navigation.navigate("Main") },
-      ]);
-    }
-  }, []);
-  // console.log(countervalue1);
+
   return (
     <View style={styles.container}>
-      {/* heder start */}
-      <View
-        style={{
-          backgroundColor: "#022169",
-          height: ht * 0.15,
-          //   justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{
-            textAlign: "center",
-            textAlignVertical: "center",
-            height: ht * 0.15,
-            color: "white",
-            fontSize: ht * 0.05,
-            fontWeight: "700",
-          }}
-        >
-          Attendence Of the Employee
-        </Text>
-      </View>
-      {/* hedaer ends */}
       {/* Value Heading Starts */}
       <View style={[styles.item, { marginTop: 0 }]}>
         <View style={{ flex: 1 }}>
@@ -108,7 +68,7 @@ function Sheet({ route, navigation }) {
   );
 }
 
-export default Sheet;
+export default Sheet1;
 
 const styles = StyleSheet.create({
   container: {

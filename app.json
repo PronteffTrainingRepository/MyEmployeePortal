@@ -2,11 +2,11 @@
   "expo": {
     "name": "MyEmployeePortal",
     "slug": "MyEmployeePortal",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon1.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash3.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +22,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "1.0.1",
-    "githubUrl": "https://github.com/PronteffTrainingRepository/MyEmployeePortal"
+    "description": "1.0.2",
+    "githubUrl": "https://github.com/Nikesh5888/Pronetff-FrontEnd",
+    "android": {
+      "package": "com.shubhampronteff.MyEmployeePortal"
+    }
   }
 }
