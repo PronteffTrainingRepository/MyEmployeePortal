@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-community/async-storage";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
@@ -78,6 +79,7 @@ function HomeHeader({ Profile, Login1 }) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
+                AsyncStorage.clear();
                 setModalVisible(false);
                 navigation.navigate("Login1");
               }}

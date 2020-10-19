@@ -8,7 +8,8 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-
+import Axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 const ht = Dimensions.get("window").width;
 const wd = Dimensions.get("window").height;
 function Sheet1({ navigation }) {
@@ -16,23 +17,35 @@ function Sheet1({ navigation }) {
   const [self, setSelf] = useState("Nil");
 
   useEffect(() => {
-    setMark([
-      ...mark,
-      {
-        id: mark.length,
-        year: new Date().getFullYear(),
-        month: new Date().getMonth(),
-        day: new Date().getDate(),
-        hour: new Date().getHours(),
-        min: new Date().getMinutes(),
-        sec: new Date().getSeconds(),
-      },
-    ]);
+    GetData();
   }, []);
+  const GetData = async () => {
+    const asyncuser = await AsyncStorage.getItem("user");
+    let User = JSON.parse(asyncuser);
+    console.log(User._id);
+    // console.log("hshshsh", asyncuser);
+    const asynctoken = await AsyncStorage.getItem("token");
+
+    console.log(asynctoken);
+    Axios.get(`http://183.83.219.220:5000/logout/userAttendance/${User._id}`, {
+      headers: {
+        contentType: "application/json",
+        Authorization: `Bearer ${asynctoken}`,
+      },
+    })
+      .then((res) => {
+        console.log("responsee", res.data);
+        setMark(res.data.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   return (
     <View style={styles.container}>
       {/* Value Heading Starts */}
+
       <View style={[styles.item, { marginTop: 0 }]}>
         <View style={{ flex: 1 }}>
           <Text style={styles.record}>Date</Text>
@@ -46,22 +59,46 @@ function Sheet1({ navigation }) {
       </View>
       {/* Value Heading Ends */}
       <View style={{ marginBottom: 50 }}>
-        {mark.map((item) => (
-          <View key={item.id} style={styles.item}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.record}>
-                {item.day}/{item.month + 1}/{item.year}
-              </Text>
+        {mark.map((item, index) => (
+          <ScrollView key={item.id}>
+            <View
+              style={[
+                styles.item,
+                { backgroundColor: index % 2 == 0 ? "#063D3A" : "#FD8C1E" },
+              ]}
+            >
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={[
+                    styles.record,
+                    { color: index % 2 == 0 ? "white" : "white" },
+                  ]}
+                >
+                  {item.logoutDate}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={[
+                    styles.record,
+                    { color: index % 2 == 0 ? "white" : "white" },
+                  ]}
+                >
+                  {item.logoutTime}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={[
+                    styles.record,
+                    { color: index % 2 == 0 ? "white" : "white" },
+                  ]}
+                >
+                  {item.totalWorkingHrs}
+                </Text>
+              </View>
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.record}>
-                {item.hour}:{item.min}:{item.sec}
-              </Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.record}>{self}</Text>
-            </View>
-          </View>
+          </ScrollView>
         ))}
       </View>
     </View>

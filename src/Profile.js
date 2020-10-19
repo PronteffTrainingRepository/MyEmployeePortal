@@ -14,6 +14,8 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
+import Axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -23,6 +25,24 @@ const wd = Dimensions.get("window").width;
 function Profile({ navigation }) {
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [id, setId] = useState();
+  const [token, setToken] = useState();
+  const [userdata, setUserData] = useState();
+  const [name, setName] = useState();
+  const [empId, setEmpId] = useState();
+  const [designation, setdesignation] = useState();
+  const [companyEmail, setCompanyEmail] = useState();
+  const [personalEmail, setPersonalEmail] = useState();
+  const [mobileno, setMobileNo] = useState("");
+  const [photo, setPhoto] = useState();
+  const [modalempid, setModalEmpId] = useState("");
+  const [modalphoneno, setModalPhoneNO] = useState("");
+  const [modalnewpassword, setModalNewPassword] = useState("");
+  const [modalconfirmpassword, setModalConfirmPassword] = useState("");
+  const [dateofjoin, setDateOfJoined] = useState();
+  const [dateofbirth, setDateOfBirth] = useState();
+  const [department, setDepartment] = useState();
+  const [sendimage, setSendImage] = useState();
   const choose = async () => {
     if (Platform.OS !== "web") {
       const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -38,14 +58,118 @@ function Profile({ navigation }) {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
 
-    console.log(result);
+    console.log("result.base64", result);
 
     if (!result.cancelled) {
       setImage(result.uri);
+      setSendImage(result.uri);
+      sendServerImage();
     }
   };
+
+  useEffect(() => {
+    GetData();
+  }, []);
+
+  const sendServerImage = async () => {
+    const asyncuser = await AsyncStorage.getItem("user");
+    let User = JSON.parse(asyncuser);
+    console.log(User._id);
+    // console.log("hshshsh", asyncuser);
+    const asynctoken = await AsyncStorage.getItem("token");
+
+    console.log("sendImage", sendimage);
+    Axios.get(
+      `http://183.83.219.220:5000/user/profilePicChange/${User._id}`,
+      {
+        photo: sendimage,
+      },
+      {
+        headers: {
+          contentType: "application/json",
+          Authorization: `Bearer ${asynctoken}`,
+        },
+      }
+    )
+      .then((res) => {
+        console.log("responsee");
+      })
+      .catch((err) => {
+        alert("hello", err);
+      });
+  };
+
+  const GetData = async () => {
+    const asyncuser = await AsyncStorage.getItem("user");
+    let User = JSON.parse(asyncuser);
+    console.log(User._id);
+    // console.log("hshshsh", asyncuser);
+    const asynctoken = await AsyncStorage.getItem("token");
+
+    console.log(asynctoken);
+    Axios.get(`http://183.83.219.220:5000/user/getUser/${User._id}`, {
+      headers: {
+        contentType: "application/json",
+        Authorization: `Bearer ${asynctoken}`,
+      },
+    })
+      .then((res) => {
+        console.log("responsee", res.data.user.empName);
+        setName(res.data.user.empName);
+        setEmpId(res.data.user.empId);
+        setdesignation(res.data.user.designation);
+        setDateOfJoined(res.data.user.dateOfJoin);
+        setCompanyEmail(res.data.user.officeEmail);
+        setPersonalEmail(res.data.user.personnelEmail);
+        let a = res.data.user.empPhoneNum.slice(0, 3);
+        let b = res.data.user.empPhoneNum.slice(9);
+        setMobileNo(`${a}******${b}`);
+        setDateOfBirth(res.data.user.DOB);
+        setPhoto(res.data.user.photo);
+        setDepartment(res.data.user.department);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const setChangePassword = async () => {
+    const asynctoken = await AsyncStorage.getItem("token");
+    console.log(asynctoken);
+    if (modalnewpassword === modalconfirmpassword) {
+      Axios.post(
+        `http://183.83.219.220:5000/user/passwordReset`,
+        {
+          empId: `${modalempid}`,
+          comfirmPassword: `${modalconfirmpassword}`,
+          empPhoneNum: `${modalphoneno}`,
+          newPassword: `${modalnewpassword}`,
+        },
+        {
+          headers: {
+            contentType: "application/json",
+            Authorization: `Bearer ${asynctoken}`,
+          },
+        }
+      )
+        .then((res) => {
+          alert(res.data.msg);
+          if (res.data.status === 200) {
+            setModalVisible(false);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    } else {
+      alert("New Password and Confirm Password are not same");
+    }
+  };
+
   return (
     <View>
       <StatusBar barStyle="light-content" backgroundColor="#AB79C6" />
@@ -57,7 +181,9 @@ function Profile({ navigation }) {
           <View>
             <Image
               style={styles.wallpaper}
-              source={require("../assets/person.jpg")}
+              source={{
+                uri: `http://183.83.219.220:5000/${photo}`,
+              }}
             />
             <View style={styles.wallpapercover}></View>
             <View
@@ -129,7 +255,9 @@ function Profile({ navigation }) {
             <View>
               <Image
                 style={styles.dp}
-                source={require("../assets/person.jpg")}
+                source={{
+                  uri: `http://183.83.219.220:5000/${photo}`,
+                }}
               />
             </View>
           ) : (
@@ -142,10 +270,10 @@ function Profile({ navigation }) {
             style={{ flex: 1, backgroundColor: "red", paddingLeft: wd * 0.05 }}
           >
             <Text style={{ fontWeight: "bold", fontSize: ht * 0.02 }}>
-              AVLIN THOMUS
+              {name}
             </Text>
             <Text style={{ color: "grey", paddingLeft: wd * 0.07 }}>
-              Network
+              {department}
             </Text>
           </View>
           {/* Name Ends */}
@@ -173,20 +301,36 @@ function Profile({ navigation }) {
           <View style={styles.modal}>
             <View style={styles.modalform}>
               <View style={styles.modalinputview}>
-                <Text style={styles.modalinputtext}>Mobile No</Text>
+                <Text style={styles.modalinputtext}>Employee Id</Text>
                 <TextInput
                   style={styles.modalinput}
-                  editable={false}
-                  Value={9988371554}
+                  onChangeText={(text) => setModalEmpId(text)}
+                  Value={modalempid}
                 />
               </View>
               <View style={styles.modalinputview}>
-                <Text style={styles.modalinputtext}>Current Password</Text>
-                <TextInput style={styles.modalinput} />
+                <Text style={styles.modalinputtext}>Phone No</Text>
+                <TextInput
+                  style={styles.modalinput}
+                  onChangeText={(text) => setModalPhoneNO(text)}
+                  Value={modalphoneno}
+                />
               </View>
               <View style={styles.modalinputview}>
-                <Text style={styles.modalinputtext}>Confirm new password</Text>
-                <TextInput style={styles.modalinput} />
+                <Text style={styles.modalinputtext}>New Password</Text>
+                <TextInput
+                  style={styles.modalinput}
+                  onChangeText={(text) => setModalNewPassword(text)}
+                  Value={modalnewpassword}
+                />
+              </View>
+              <View style={styles.modalinputview}>
+                <Text style={styles.modalinputtext}>Confirm Password</Text>
+                <TextInput
+                  style={styles.modalinput}
+                  onChangeText={(text) => setModalConfirmPassword(text)}
+                  Value={modalconfirmpassword}
+                />
               </View>
             </View>
             <View style={{ flex: 1, justifyContent: "flex-end" }}>
@@ -216,7 +360,16 @@ function Profile({ navigation }) {
                 <TouchableHighlight
                   style={{ flex: 1 }}
                   onPress={() => {
-                    setModalVisible(false);
+                    if (
+                      modalempid.length > 0 &&
+                      modalphoneno.length > 0 &&
+                      modalnewpassword.length > 0 &&
+                      modalconfirmpassword.length > 0
+                    ) {
+                      setChangePassword();
+                    } else {
+                      alert("All fields must be filled");
+                    }
                   }}
                 >
                   <Text
@@ -243,39 +396,71 @@ function Profile({ navigation }) {
           {/* name starts */}
           <View style={styles.section}>
             <Text style={styles.inputtitle}>Name</Text>
-            <TextInput style={styles.input} editable={false} />
+            <TextInput style={styles.input} editable={false} value={name} />
           </View>
           {/* name Ends */}
           {/* Emp id starts */}
           <View style={styles.section}>
             <Text style={styles.inputtitle}>EmpID</Text>
-            <TextInput style={styles.input} editable={false} />
+            <TextInput style={styles.input} editable={false} value={empId} />
           </View>
           {/* Emp id Ends */}
           {/* designation starts */}
           <View style={styles.section}>
             <Text style={styles.inputtitle}>Designation</Text>
-            <TextInput style={styles.input} editable={false} />
+            <TextInput
+              style={styles.input}
+              editable={false}
+              value={designation}
+            />
           </View>
           {/* designation Ends */}
+          {/* date of joined starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>Date of joined</Text>
+            <TextInput
+              style={styles.input}
+              editable={false}
+              value={dateofjoin}
+            />
+          </View>
+          {/* date of joined Ends */}
           {/* Company's Email starts */}
           <View style={styles.section}>
             <Text style={styles.inputtitle}>Company's Email</Text>
-            <TextInput style={styles.input} editable={false} />
+            <TextInput
+              style={styles.input}
+              editable={false}
+              value={companyEmail}
+            />
           </View>
           {/* Company's Email Ends */}
           {/* Personal Email starts */}
           <View style={styles.section}>
             <Text style={styles.inputtitle}>Personal Email</Text>
-            <TextInput style={styles.input} editable={false} />
+            <TextInput
+              style={styles.input}
+              editable={false}
+              value={personalEmail}
+            />
           </View>
           {/* Personla Email Ends */}
           {/* Mobile number starts */}
           <View style={styles.section}>
             <Text style={styles.inputtitle}>Mobile Number</Text>
-            <TextInput style={styles.input} editable={false} />
+            <TextInput style={styles.input} editable={false} value={mobileno} />
           </View>
           {/* Mobile Number Ends */}
+          {/* Date of birth starts */}
+          <View style={styles.section}>
+            <Text style={styles.inputtitle}>Date of birth</Text>
+            <TextInput
+              style={styles.input}
+              editable={false}
+              value={dateofbirth}
+            />
+          </View>
+          {/* Date of birth Ends */}
           {/* Change Password Starts */}
           <View style={styles.buttonview}>
             <TouchableOpacity
@@ -322,6 +507,8 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     height: ht * 0.05,
     paddingLeft: wd * 0.02,
+    color: "black",
+    fontWeight: "bold",
   },
   inputtitle: {
     color: "#9061A8",
@@ -356,8 +543,8 @@ const styles = StyleSheet.create({
     left: wd * 0.15,
     backgroundColor: "white",
     elevation: 5,
-    height: ht * 0.4,
-    width: wd * 0.7,
+    height: ht * 0.47,
+    width: wd * 0.74,
     borderRadius: ht * 0.01,
   },
   modalclose: {
@@ -370,7 +557,7 @@ const styles = StyleSheet.create({
     // paddingTop: ht * 0.005,
   },
   modalinput: {
-    width: wd * 0.66,
+    width: wd * 0.7,
     borderBottomWidth: wd * 0.001,
   },
   modalinputtext: {

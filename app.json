@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MyEmployeePortal",
-    "slug": "MyEmployeePortal",
+    "name": "Prontee",
+    "slug": "Prontee",
     "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon1.png",
@@ -22,10 +22,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "1.0.2",
+    "description": "1.0.4",
     "githubUrl": "https://github.com/Nikesh5888/Pronetff-FrontEnd",
     "android": {
-      "package": "com.shubhampronteff.MyEmployeePortal"
+      "package": "com.shubhampronteff.Prontee"
     }
   }
 }

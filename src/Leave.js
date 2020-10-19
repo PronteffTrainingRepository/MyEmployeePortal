@@ -13,8 +13,8 @@ import {
   Platform,
   Picker,
 } from "react-native";
-import { Fontisto } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
+import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Entypo } from "@expo/vector-icons";
 const ht = Dimensions.get("window").height;
@@ -37,8 +37,70 @@ function Leave() {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+    setDateFrom(
+      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    );
+    setDateTo(
+      date.getDate() +
+        Number(selectedValue1) +
+        "/" +
+        (date.getMonth() + 1) +
+        "/" +
+        date.getFullYear()
+    );
   };
+  useEffect(() => {
+    setDateFrom(
+      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    );
+    setDateTo(
+      date.getDate() +
+        Number(selectedValue1) +
+        "/" +
+        (date.getMonth() + 1) +
+        "/" +
+        date.getFullYear()
+    );
+  }, [date, selectedValue1, dateto, datefrom]);
 
+  async function getData() {
+    const asynctoken = await AsyncStorage.getItem("token");
+    console.log(asynctoken);
+    console.log("dateto", dateto);
+    console.log("datefrom", datefrom);
+    console.log("days", selectedValue1);
+    console.log("reason", selectedValue);
+    console.log("description", description);
+
+    await axios
+      .post(
+        "http://183.83.219.220:5000/user/email",
+
+        {
+          days: selectedValue1,
+          datefrom: datefrom,
+          dateto: dateto,
+          reason: selectedValue,
+          description: description,
+        },
+        {
+          headers: {
+            contentType: "application/json",
+            Authorization: `Bearer ${asynctoken}`,
+          },
+        }
+      )
+      .then(async (res) => {
+        console.log(res.data);
+        alert(res.data.msg);
+      })
+      .catch((msg) => {
+        alert(msg);
+      });
+  }
+
+  console.log(datefrom);
+  console.log(dateto);
   return (
     <View style={styles.conatiner}>
       <StatusBar barStyle="light-content" backgroundColor="#022169" />
@@ -138,13 +200,7 @@ function Leave() {
                 <Text style={styles.inputtext}>From</Text>
                 <TextInput
                   style={styles.leave}
-                  value={
-                    date.getDate() +
-                    "/" +
-                    (date.getMonth() + 1) +
-                    "/" +
-                    date.getFullYear()
-                  }
+                  value={datefrom}
                   editable={false}
                 />
                 {show && (
@@ -183,14 +239,7 @@ function Leave() {
                 <Text style={styles.inputtext}>to</Text>
                 <TextInput
                   style={styles.leave}
-                  value={
-                    date.getDate() +
-                    Number(selectedValue1) +
-                    "/" +
-                    (date.getMonth() + 1) +
-                    "/" +
-                    date.getFullYear()
-                  }
+                  value={dateto}
                   editable={false}
                 />
 
@@ -226,14 +275,7 @@ function Leave() {
 
             {/* Submit Starts */}
             <View style={[styles.section, { alignItems: "center" }]}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() =>
-                  alert(
-                    `reason : ${reason} and days : and from :${datefrom} - to :${dateto} and cause : ${checkpresent} and ${description}`
-                  )
-                }
-              >
+              <TouchableOpacity style={styles.button} onPress={() => getData()}>
                 <Text style={styles.buttontext}>Apply</Text>
               </TouchableOpacity>
             </View>

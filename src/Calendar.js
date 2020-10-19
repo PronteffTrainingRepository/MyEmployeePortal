@@ -6,6 +6,7 @@ import {
   Dimensions,
   StatusBar,
   Animated,
+  Image,
 } from "react-native";
 import {
   ScrollView,
@@ -24,8 +25,8 @@ function Calendar() {
         break;
       default:
         const title = item.type;
-        Image.propTypes.style = { width: 100, height: 100 };
-        dropdown.alertWithType(item.type, title, item.message, item.imageSrc);
+        const imageSrc = item.imageSrc;
+        dropdown.alertWithType(item.type, title, item.message);
     }
   };
   const handleClose = (data) => {
@@ -49,7 +50,6 @@ function Calendar() {
                   message: "hello",
                   title: "hello",
                   imageSrc: "../assets/person.jpg",
-                  imageStyle: { width: 100, height: 100 },
                 })
               }
             >
@@ -125,9 +125,9 @@ function Calendar() {
         showCancel={true}
         onClose={(data) => handleClose(data)}
         onCancel={(data) => handleCancel(data)}
-        //  imageSrc={"../"}
-
-        imageStyle={{ width: 200, height: 200, backgroundColor: "red" }}
+        // imageSrc={require("../assets/plogo.png")}
+        imageStyle={{ width: 50, height: 50, backgroundColor: "pink" }}
+        infoImageSrc={require("../assets/icon.png")}
       />
     </View>
   );

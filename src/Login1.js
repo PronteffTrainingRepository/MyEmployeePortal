@@ -13,6 +13,8 @@ import {
   ImageBackground,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 const ht = Dimensions.get("window").height;
@@ -32,7 +34,30 @@ function Login1({ navigation }) {
   const [seepassword, setSeePassword] = useState(true);
   const [isFocused, setBorder] = useState(false);
   const [isFocused1, setBorder1] = useState(false);
+  async function getData() {
+    await axios
+      .post(
+        "http://183.83.219.220:5000/user/signin",
 
+        { empId: username, password: password }
+      )
+      .then(async (res) => {
+        console.log(res.data);
+        let token = res.data.token;
+        console.log(token);
+        if (res.data.status == 400) {
+          alert(res.data.msg);
+        } else {
+          await AsyncStorage.setItem("token", res.data.token);
+          const jsonuser = JSON.stringify(res.data.user);
+          await AsyncStorage.setItem("user", jsonuser);
+          navigation.navigate("Main");
+        }
+      })
+      .catch((msg) => {
+        alert(msg);
+      });
+  }
   const input3 = useRef();
   const onFocusChange = () => {
     setBorder({ isFocused: true });
@@ -55,57 +80,6 @@ function Login1({ navigation }) {
             keyboardVerticalOffset={keyboardVerticalOffset}
             behavior="position"
           >
-            {/* <View
-              style={{
-                // paddingLeft: wd * 0.05,
-                // paddingRight: wd * 0.05,
-                borderRadius: ht * 0.01,
-                height: ht * 0.3,
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  // backgroundColor: "red",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginBottom: ht * 0.03,
-                }}
-              >
-                <Image
-                  style={{
-                    height: ht * 0.2,
-                    width: wd * 0.4,
-                    marginBottom: ht * 0.01,
-                    borderRightWidth: ht * 0.02,
-                    borderColor: "grey",
-                    borderWidth: wd * 0.003,
-                    borderRadius: ht * 0.02,
-                  }}
-                  source={require("../assets/plogo.png")}
-                />
-                <Text
-                  style={{
-                    color: "#464967",
-                    fontWeight: "bold",
-                    fontSize: ht * 0.04,
-                  }}
-                >
-                  Pronteff IT Solutions
-                </Text>
-              </View>
-              <View style={{ flex: 1, justifyContent: "center" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontWeight: "800",
-                    fontSize: ht * 0.04,
-                  }}
-                >
-                  Welcome back!
-                </Text>
-              </View>
-            </View> */}
             {/* Heading Ends */}
             {/* Form starts */}
             <View
@@ -130,7 +104,7 @@ function Login1({ navigation }) {
                   placeholderTextColor="silver"
                   onChangeText={(text) => setUsername(text)}
                   onSubmitEditing={() => input3.current.focus()}
-                  autoFocus={true}
+                  // autoFocus={true}
                   selectionColor="tomato"
                   onFocus={() => onFocusChange()}
                   onBlur={() => setBorder(false)}
@@ -198,7 +172,9 @@ function Login1({ navigation }) {
                   //     alert("Wrong ID and Password");
                   //   }
                   // }}
-                  onPress={() => navigation.navigate("Main")}
+                  onPress={() => {
+                    getData();
+                  }}
                 >
                   <Text style={styles.buttontext}>Submit</Text>
                 </TouchableOpacity>

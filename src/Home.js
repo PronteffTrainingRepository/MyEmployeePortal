@@ -12,6 +12,8 @@ import MapView, { Marker, Circle } from "react-native-maps";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
+import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 
@@ -35,7 +37,7 @@ function Home({ WorkTime }) {
   const [region, setRegion] = useState({
     latitude: 17.385,
     longitude: 78.4867,
-    latitudeDelta: 0.005,
+    latitudeDelta: 0.006,
     longitudeDelta: 0.005,
   });
   const [coordinates, setCoordinates] = useState({
@@ -96,12 +98,6 @@ function Home({ WorkTime }) {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (route.params.countvalue) {
-  //     setGraph(route.params.countvalue);
-  //   }
-  // }, [route.params.countvalue]);
-
   const watch1 = async () => {
     console.log("came here");
     let { status } = await Location.requestPermissionsAsync();
@@ -128,12 +124,12 @@ function Home({ WorkTime }) {
         if (locations.coords !== null) {
           console.log("im here too");
           if (
-            locations.coords.latitude >= 17.4386001 &&
-            locations.coords.latitude <= 17.4387999 &&
-            locations.coords.longitude >= 78.3943001 &&
-            locations.coords.longitude <= 78.3946999
+            locations.coords.latitude >= 17.438250832 &&
+            locations.coords.latitude <= 17.439149167 &&
+            locations.coords.longitude >= 78.394129193 &&
+            locations.coords.longitude <= 78.395070806
           ) {
-            navigation.navigate("WorkTime");
+            getData();
           } else {
             alert("Not in Range");
           }
@@ -146,6 +142,43 @@ function Home({ WorkTime }) {
       }
     }
   };
+  async function getData() {
+    const asynctoken = await AsyncStorage.getItem("token");
+    console.log(asynctoken);
+    let date = new Date();
+
+    await axios
+      .post(
+        "http://183.83.219.220:5000/login/markAttendance",
+
+        {
+          loginDate: `${
+            date.getDate() +
+            "-" +
+            (date.getMonth() + 1) +
+            "-" +
+            date.getFullYear()
+          }`,
+          loginTime: `${date.getHours() + ":" + date.getMinutes()}`,
+          latitude: `${location.coords.latitude}`,
+          longitude: `${location.coords.longitude}`,
+        },
+        {
+          headers: {
+            contentType: "application/json",
+            Authorization: `Bearer ${asynctoken}`,
+          },
+        }
+      )
+      .then(async (res) => {
+        console.log(res.data);
+        alert(res.data.msg);
+        navigation.navigate("WorkTime");
+      })
+      .catch((msg) => {
+        alert(msg);
+      });
+  }
 
   const See = async () => {
     if (Platform.OS === "android" && !Constants.isDevice) {
@@ -186,10 +219,6 @@ function Home({ WorkTime }) {
       stroke: "#ffa726",
     },
   };
-
-  // const onRegionChange = (region) => {
-  //   setRegion({ region });
-  // };
   console.log("number");
   return (
     <ScrollView>
@@ -279,7 +308,7 @@ function Home({ WorkTime }) {
             zoomControlEnabled={true}
           >
             <Marker coordinate={coordinates} pinColor="green" />
-            <Circle center={coords} radius={50} fillColor="#fff" />
+            <Circle center={coords} radius={50} fillColor="transparent" />
           </MapView>
         </View>
 

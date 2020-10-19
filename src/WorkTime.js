@@ -13,7 +13,8 @@ import {
 import { Stopwatch } from "react-native-stopwatch-timer";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
-import { log } from "react-native-reanimated";
+import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
@@ -44,10 +45,49 @@ function WorkTime({ navigation: { navigate } }) {
         setStart(true);
       } else {
         alert("not in range");
-        navigate("Sheet", { countvalue2: total });
+        getData("not in range");
       }
     }
   };
+  async function getData(titles) {
+    const asynctoken = await AsyncStorage.getItem("token");
+    console.log(asynctoken);
+    let date = new Date();
+
+    await axios
+      .post(
+        "http://183.83.219.220:5000/logout/markAttendance",
+
+        {
+          logoutDate: `${
+            date.getDate() +
+            "-" +
+            (date.getMonth() + 1) +
+            "-" +
+            date.getFullYear()
+          }`,
+          logoutTime: `${date.getHours() + ":" + date.getMinutes()}`,
+          totalWorkingHrs: `${total}`,
+          latitude: `${location.coords.latitude}`,
+          longitude: `${location.coords.longitude}`,
+          title: titles,
+        },
+        {
+          headers: {
+            contentType: "application/json",
+            Authorization: `Bearer ${asynctoken}`,
+          },
+        }
+      )
+      .then(async (res) => {
+        console.log(res.data);
+        alert(res.data.msg);
+        navigate("Main");
+      })
+      .catch((msg) => {
+        alert(msg);
+      });
+  }
 
   useEffect(() => {
     if (Platform.OS === "android" && !Constants.isDevice) {
@@ -120,7 +160,7 @@ function WorkTime({ navigation: { navigate } }) {
       <View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigate("Sheet", { countvalue1: total })}
+          onPress={() => getData("Done for the day")}
         >
           <Text style={styles.buttontext}>Done For the Day</Text>
         </TouchableOpacity>
