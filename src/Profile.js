@@ -12,7 +12,9 @@ import {
   Modal,
   TouchableHighlight,
 } from "react-native";
+// import ImagePicker from "react-native-image-picker";
 import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 import Axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -53,20 +55,26 @@ function Profile({ navigation }) {
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      base64: true,
-    });
+    const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (granted) {
+      let data = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+      if (!data.cancelled) {
+        let newFile = {
+          uri: data.uri,
+          type: `test/${data.uri.split(".")[1]}`,
+          name: `test.${data.uri.split(".")[1]}`,
+        };
+        setImage(data.uri);
 
-    console.log("result.base64", result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-      setSendImage(result.uri);
-      sendServerImage();
+        sendServerImage(data);
+      }
+    } else {
+      Alert("pleas select give permission");
     }
   };
 
@@ -74,18 +82,22 @@ function Profile({ navigation }) {
     GetData();
   }, []);
 
-  const sendServerImage = async () => {
+  const sendServerImage = async (data) => {
     const asyncuser = await AsyncStorage.getItem("user");
     let User = JSON.parse(asyncuser);
-    console.log(User._id);
-    // console.log("hshshsh", asyncuser);
-    const asynctoken = await AsyncStorage.getItem("token");
 
-    console.log("sendImage", sendimage);
-    Axios.get(
-      `http://183.83.219.220:5000/user/profilePicChange/${User._id}`,
+    const asynctoken = await AsyncStorage.getItem("token");
+    console.log("====================================");
+    console.log(User._id, data);
+    console.log("====================================");
+
+    const newForm = new FormData();
+    newForm.append("photo", data);
+
+    Axios.post(
+      `http://172.16.224.250:5000/user/profilePicChange/${User._id}`,
       {
-        photo: sendimage,
+        newForm,
       },
       {
         headers: {
@@ -95,7 +107,8 @@ function Profile({ navigation }) {
       }
     )
       .then((res) => {
-        console.log("responsee");
+        console.log("responsee", res.data);
+        console.log("hello");
       })
       .catch((err) => {
         alert("hello", err);
@@ -236,6 +249,13 @@ function Profile({ navigation }) {
             >
               <TouchableOpacity onPress={pickImage}>
                 <Fontisto name="camera" size={24} color="silver" />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{ position: "absolute", top: ht * 0.01, left: wd * 0.03 }}
+            >
+              <TouchableOpacity onPress={() => navigation.navigate("Main")}>
+                <AntDesign name="arrowleft" size={30} color="silver" />
               </TouchableOpacity>
             </View>
           </View>

@@ -147,7 +147,7 @@ function WorkTime({ navigation: { navigate } }) {
         getTime={(time) => {
           setTotal(time);
         }}
-        getMsecs={(time) => console.log(time / 100)}
+        // getMsecs={(time) => console.log(time / 100)}
         // getMsecs={(time) => {
         //   if (start == false) {
         //     setTotal(time);

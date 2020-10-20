@@ -24,7 +24,7 @@ function Leave() {
   const [description, setDescription] = useState("");
   const [datefrom, setDateFrom] = useState("");
   const [dateto, setDateTo] = useState("");
-  const [selectedValue, setSelectedValue] = useState("Sick");
+  const [selectedValue, setSelectedValue] = useState("Fever");
   const [selectedValue1, setSelectedValue1] = useState("0");
 
   const keyboardVerticalOffset =
@@ -93,14 +93,13 @@ function Leave() {
       .then(async (res) => {
         console.log(res.data);
         alert(res.data.msg);
+        setDescription("");
       })
       .catch((msg) => {
         alert(msg);
       });
   }
 
-  console.log(datefrom);
-  console.log(dateto);
   return (
     <View style={styles.conatiner}>
       <StatusBar barStyle="light-content" backgroundColor="#022169" />
@@ -140,9 +139,19 @@ function Leave() {
                     setSelectedValue(itemValue)
                   }
                 >
-                  <Picker.Item label="Sick" value="Sick" />
-                  <Picker.Item label="Casual" value="Casual" />
-                  <Picker.Item label="Other" value="Other" />
+                  <Picker.Item label="Fever" value="Fever" />
+                  <Picker.Item
+                    label="Not Feeling Well"
+                    value="Not Feeling Well"
+                  />
+                  <Picker.Item
+                    label="Family Function"
+                    value="Family Function"
+                  />
+                  <Picker.Item
+                    label="Personal Reason"
+                    value="Personal Reason"
+                  />
                 </Picker>
               </View>
             </View>
@@ -172,11 +181,10 @@ function Leave() {
                     setSelectedValue1(itemValue)
                   }
                 >
-                  <Picker.Item label="0" value="0" />
-                  <Picker.Item label="1" value="1" />
-                  <Picker.Item label="2" value="2" />
-                  <Picker.Item label="3" value="3" />
-                  <Picker.Item label="4" value="4" />
+                  <Picker.Item label="Half Day" value="0" />
+                  <Picker.Item label="1 Day" value="1" />
+                  <Picker.Item label="2 Days" value="2" />
+                  <Picker.Item label="3 Days" value="3" />
                 </Picker>
               </View>
             </View>
@@ -269,13 +277,41 @@ function Leave() {
                 style={styles.description}
                 multiline={true}
                 onChangeText={(text) => setDescription(text)}
+                value={description}
               />
             </View>
             {/* Description Ends */}
 
             {/* Submit Starts */}
             <View style={[styles.section, { alignItems: "center" }]}>
-              <TouchableOpacity style={styles.button} onPress={() => getData()}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  if (
+                    selectedValue === "" ||
+                    selectedValue1 === "" ||
+                    datefrom === "" ||
+                    dateto === "" ||
+                    description === ""
+                  ) {
+                    alert("All Fields Must be Filled");
+                  } else {
+                    getData();
+                    console.log("====================================");
+                    console.log("selectedValue1", selectedValue1);
+                    console.log("====================================");
+                    console.log("====================================");
+                    console.log("From", datefrom);
+                    console.log("====================================");
+                    console.log("to", dateto);
+                    console.log("====================================");
+                    console.log("====================================");
+                    console.log("description", description);
+                    console.log("====================================");
+                    console.log("====================================");
+                  }
+                }}
+              >
                 <Text style={styles.buttontext}>Apply</Text>
               </TouchableOpacity>
             </View>

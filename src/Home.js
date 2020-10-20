@@ -172,7 +172,7 @@ function Home({ WorkTime }) {
       )
       .then(async (res) => {
         console.log(res.data);
-        alert(res.data.msg);
+        alert("Attendence Timer is going to Start");
         navigation.navigate("WorkTime");
       })
       .catch((msg) => {
