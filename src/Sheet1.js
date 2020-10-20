@@ -53,7 +53,7 @@ function Sheet1({ navigation }) {
       <View style={{ marginBottom: ht * 0.05 }}>
         {mark.map((item, index) => (
           <View
-            key={item.id}
+            key={index}
             style={[
               styles.item,
               { backgroundColor: index % 2 == 0 ? "#063D3A" : "#FD8C1E" },

@@ -81,6 +81,7 @@ function HomeHeader({ Profile, Login1 }) {
               onPress={() => {
                 AsyncStorage.clear();
                 setModalVisible(false);
+                console.log("asynctoken clear");
                 navigation.navigate("Login1");
               }}
               style={{

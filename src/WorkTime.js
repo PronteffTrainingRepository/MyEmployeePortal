@@ -154,7 +154,7 @@ function WorkTime({ navigation: { navigate } }) {
         //   }
         // }}
       />
-      <Text>{total}</Text>
+      {/* <Text>{total}</Text> */}
       {/*  Timer Ends */}
       {/* Done for the Day Starts */}
       <View>
@@ -169,10 +169,10 @@ function WorkTime({ navigation: { navigate } }) {
         <Text>{count}</Text>
       </View> */}
       {/* Done for the Day Ends */}
-      <View>
+      {/* <View>
         <Text>Latitude:{text}</Text>
         <Text>Longitude:{text1}</Text>
-      </View>
+      </View> */}
     </View>
   );
 }

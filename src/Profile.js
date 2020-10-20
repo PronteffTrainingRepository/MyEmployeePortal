@@ -62,16 +62,18 @@ function Profile({ navigation }) {
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
+        base64: true,
       });
       if (!data.cancelled) {
+        console.log("data--------", data);
         let newFile = {
           uri: data.uri,
-          type: `test/${data.uri.split(".")[1]}`,
-          name: `test.${data.uri.split(".")[1]}`,
+          type: data.type,
+          name: data.filename,
         };
         setImage(data.uri);
 
-        sendServerImage(data);
+        sendServerImage(newFile);
       }
     } else {
       Alert("pleas select give permission");

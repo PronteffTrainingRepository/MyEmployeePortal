@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Text,
   View,
@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ImageBackground,
+  BackHandler,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import axios from "axios";
@@ -65,7 +66,12 @@ function Login1({ navigation }) {
   const onFocusChange1 = () => {
     setBorder1({ isFocused: true });
   };
-
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", function () {
+      return true;
+    });
+    return () => BackHandler.removeEventListener();
+  }, []);
   return (
     <ImageBackground
       source={require("../assets/splash2.png")}
@@ -104,7 +110,7 @@ function Login1({ navigation }) {
                   placeholderTextColor="silver"
                   onChangeText={(text) => setUsername(text)}
                   onSubmitEditing={() => input3.current.focus()}
-                  // autoFocus={true}
+                  autoCompleteType="username"
                   selectionColor="tomato"
                   onFocus={() => onFocusChange()}
                   onBlur={() => setBorder(false)}

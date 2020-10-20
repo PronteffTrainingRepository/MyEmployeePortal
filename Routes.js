@@ -9,94 +9,73 @@ import "react-native-gesture-handler";
 import AsyncStorage from "@react-native-community/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ActivityIndicator } from "react-native";
-// import { enableScreens } from "react-native-screens";
+import { ActivityIndicator, View, Text } from "react-native";
 
-import { connect } from "react-redux";
-import { loginData, logOut } from "./src/redux/Action";
+// import { enableScreens } from "react-native-screens";
 // enableScreens();
 const Stack = createStackNavigator();
 
-function Routes(props) {
-  const [token, settoken] = useState(null);
-  // const [nav, setNav] = useState(false);
+function Routes() {
+  const [nav, setNav] = useState(null);
   // const [checktoken, setCheckToken] = useState();
+  console.log("nav in starting", nav);
+  const getData = async () => {
+    const asynctoken = await AsyncStorage.getItem("token").then(
+      (asynctoken) => {
+        console.log("asynctoken-----------", asynctoken);
+        if (asynctoken != null) {
+          setNav(true);
+        } else {
+          setNav(false);
+        }
+      }
+    );
+  };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-  // var s;
-  // const getData = async () => {
-  //   const asynctoken = await AsyncStorage.getItem("token")
-  //     .then((asynctoken) => {
-  //       console.log("asynctoken", asynctoken);
-  //       setNav(true);
-  //     })
-  //     .then((asynctoken) => {
-  //       if (asynctoken == null) {
-  //         s = false;
-  //       } else {
-  //         s = true;
-  //       }
-  //     });
-  // };
-  alert(props.values.Token);
-  console.log("ksajfdpahhsfopiahsgopu", props);
   useEffect(() => {
-    const asynctoken = AsyncStorage.getItem("token");
-    if (asynctoken) {
-      settoken(true);
-      props.loginData();
-    } else {
-      settoken(false);
-      props.logOut();
-    }
-  }, []);
+    getData();
+  }, [nav]);
 
+  console.log("nav--------", nav);
+  console.log("");
+  if (nav == null) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="blue" />
+      </View>
+    );
+  }
   return (
     <NavigationContainer>
-      {token == null ? (
-        <Stack.Navigator>
-          {props.values.Token ? (
-            <>
-              <Stack.Screen
-                name="Main"
-                component={Main}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="WorkTime"
-                component={WorkTime}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Profile"
-                component={Profile}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Sheet"
-                component={Sheet}
-                options={{ headerShown: false }}
-              />
-            </>
-          ) : (
-            <Stack.Screen
-              name="Login1"
-              component={Login1}
-              options={{ headerShown: false }}
-            />
-          )}
-        </Stack.Navigator>
-      ) : (
-        <ActivityIndicator size="large" />
-      )}
+      <Stack.Navigator initialRouteName={nav ? "Main" : "Login1"}>
+        <Stack.Screen
+          name="Login1"
+          component={Login1}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="WorkTime"
+          component={WorkTime}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Sheet"
+          component={Sheet}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const mapStateToProps = (state) => ({
-  values: state.tokens,
-});
-
-export default connect(mapStateToProps, { loginData, logOut })(Routes);
+export default Routes;
