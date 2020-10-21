@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Dimensions, StyleSheet, Text, FlatList } from "react-native";
 import Axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
+import { ScrollView } from "react-native-gesture-handler";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 function Sheet1({ navigation }) {
@@ -25,7 +26,7 @@ function Sheet1({ navigation }) {
       },
     })
       .then((res) => {
-        console.log("responsee", res.data);
+        console.log("mark", res.data.data);
         setMark(res.data.data);
       })
       .catch((err) => {
@@ -50,8 +51,13 @@ function Sheet1({ navigation }) {
       </View>
       {/* Value Heading Ends */}
 
-      <View style={{ marginBottom: ht * 0.05 }}>
-        {mark.map((item, index) => (
+      <View
+        style={{
+          marginBottom: ht * 0.05,
+          height: ht * 0.77,
+        }}
+      >
+        {/* {mark.map((item, index) => (
           <View
             key={index}
             style={[
@@ -69,7 +75,32 @@ function Sheet1({ navigation }) {
               <Text style={styles.record}>{item.totalWorkingHrs}</Text>
             </View>
           </View>
-        ))}
+        ))} */}
+        <ScrollView>
+          <FlatList
+            data={mark}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item, index }) => (
+              <View
+                key={index}
+                style={[
+                  styles.item,
+                  { backgroundColor: index % 2 == 0 ? "#063D3A" : "#FD8C1E" },
+                ]}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.record}>{item.logoutDate}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.record}>{item.logoutTime}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.record}>{item.totalWorkingHrs}</Text>
+                </View>
+              </View>
+            )}
+          />
+        </ScrollView>
       </View>
     </View>
   );
@@ -87,7 +118,6 @@ const styles = StyleSheet.create({
     paddingLeft: wd * 0.02,
     justifyContent: "center",
     paddingRight: wd * 0.02,
-
     backgroundColor: "white",
     borderColor: "grey",
     borderWidth: wd * 0.001,
@@ -98,7 +128,7 @@ const styles = StyleSheet.create({
   record: {
     color: "white",
     fontWeight: "bold",
-    fontSize: ht * 0.025,
+    fontSize: ht * 0.0235,
     textAlign: "center",
     height: ht * 0.07,
     textAlignVertical: "center",

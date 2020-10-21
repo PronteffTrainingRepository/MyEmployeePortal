@@ -52,6 +52,7 @@ function Login1({ navigation }) {
           await AsyncStorage.setItem("token", res.data.token);
           const jsonuser = JSON.stringify(res.data.user);
           await AsyncStorage.setItem("user", jsonuser);
+          console.log("jsonuser", jsonuser);
           navigation.navigate("Main");
         }
       })
@@ -166,20 +167,14 @@ function Login1({ navigation }) {
               <View style={{ alignItems: "center", marginTop: ht * 0.1 }}>
                 <TouchableOpacity
                   style={styles.button}
-                  //  onPress={() => alert(`${name} and ${username} and ${password}`)}
-                  // onPress={() => {
-                  //   if (username == "") {
-                  //     alert("username is required");
-                  //   } else if (password == "") {
-                  //     alert("Password Feild Can not Be Empty");
-                  //   } else if (username == "PE017" && password == "PE017") {
-                  //     navigation.navigate("Main");
-                  //   } else {
-                  //     alert("Wrong ID and Password");
-                  //   }
-                  // }}
                   onPress={() => {
-                    getData();
+                    if (username == "") {
+                      alert("username is required");
+                    } else if (password == "") {
+                      alert("Password Feild Can not Be Empty");
+                    } else {
+                      getData();
+                    }
                   }}
                 >
                   <Text style={styles.buttontext}>Submit</Text>
@@ -210,11 +205,11 @@ const styles = StyleSheet.create({
     width: wd * 0.8,
     borderRadius: ht * 0.007,
     paddingLeft: wd * 0.03,
-    color: "black",
+    color: "#000000",
     height: ht * 0.055,
   },
   inputtext: {
-    color: "black",
+    color: "#000000",
     fontWeight: "bold",
     marginBottom: ht * 0.015,
     fontSize: ht * 0.025,

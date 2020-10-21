@@ -12,7 +12,6 @@ import {
   Modal,
   TouchableHighlight,
 } from "react-native";
-// import ImagePicker from "react-native-image-picker";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
@@ -24,12 +23,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
-function Profile({ navigation }) {
+function Profile1({ navigation }) {
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [id, setId] = useState();
-  const [token, setToken] = useState();
-  const [userdata, setUserData] = useState();
   const [name, setName] = useState();
   const [empId, setEmpId] = useState();
   const [designation, setdesignation] = useState();
@@ -45,6 +41,7 @@ function Profile({ navigation }) {
   const [dateofbirth, setDateOfBirth] = useState();
   const [department, setDepartment] = useState();
   const [sendimage, setSendImage] = useState();
+
   const choose = async () => {
     if (Platform.OS !== "web") {
       const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -62,17 +59,17 @@ function Profile({ navigation }) {
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
-        base64: true,
+        // base64: true,
       });
       if (!data.cancelled) {
         console.log("data--------", data);
         let newFile = {
           uri: data.uri,
-          type: data.type,
-          name: data.filename,
+          type: `test/${data.uri.split(".")[1]}`,
+          name: `test.${data.uri.split(".")[1]}`,
         };
+        console.log("datdda--------", newFile);
         setImage(data.uri);
-
         sendServerImage(newFile);
       }
     } else {
@@ -84,36 +81,48 @@ function Profile({ navigation }) {
     GetData();
   }, []);
 
-  const sendServerImage = async (data) => {
+  const sendServerImage = async (newFile) => {
     const asyncuser = await AsyncStorage.getItem("user");
     let User = JSON.parse(asyncuser);
 
     const asynctoken = await AsyncStorage.getItem("token");
     console.log("====================================");
-    console.log(User._id, data);
+    console.log(User._id, newFile);
     console.log("====================================");
 
-    const newForm = new FormData();
-    newForm.append("photo", data);
-
-    Axios.post(
-      `http://172.16.224.250:5000/user/profilePicChange/${User._id}`,
-      {
-        newForm,
-      },
-      {
-        headers: {
-          contentType: "application/json",
-          Authorization: `Bearer ${asynctoken}`,
-        },
-      }
-    )
-      .then((res) => {
-        console.log("responsee", res.data);
-        console.log("hello");
-      })
-      .catch((err) => {
-        alert("hello", err);
+    const data = new FormData();
+    data.append("file", newFile);
+    data.append("upload_preset", "employeeApp");
+    data.append("cloud_name", "dxif90ym7");
+    fetch("https://api.cloudinary.com/v1_1/dxif90ym7/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSendImage(data.url);
+        console.log("asdjkfhkasfhkjadlhsf", data.url);
+        if (data.url) {
+          Axios.post(
+            `http://183.83.219.220:5000/user/profilePicChange/${User._id}`,
+            {
+              photo: data.url,
+            },
+            {
+              headers: {
+                contentType: "multipart/form-data",
+                Authorization: `Bearer ${asynctoken}`,
+              },
+            }
+          )
+            .then((res) => {
+              console.log("responsee", res.data);
+              console.log("hello");
+            })
+            .catch((err) => {
+              alert("i am in catch block ", err);
+            });
+        }
       });
   };
 
@@ -197,7 +206,7 @@ function Profile({ navigation }) {
             <Image
               style={styles.wallpaper}
               source={{
-                uri: `http://183.83.219.220:5000/${photo}`,
+                uri: `${photo}`,
               }}
             />
             <View style={styles.wallpapercover}></View>
@@ -269,7 +278,7 @@ function Profile({ navigation }) {
           style={{
             position: "relative",
             top: -ht * 0.11,
-            left: wd * 0.34,
+            left: wd * 0.31,
             // backgroundColor: "red",
           }}
         >
@@ -278,7 +287,7 @@ function Profile({ navigation }) {
               <Image
                 style={styles.dp}
                 source={{
-                  uri: `http://183.83.219.220:5000/${photo}`,
+                  uri: `${photo}`,
                 }}
               />
             </View>
@@ -289,12 +298,28 @@ function Profile({ navigation }) {
           )}
           {/* Name Starts */}
           <View
-            style={{ flex: 1, backgroundColor: "red", paddingLeft: wd * 0.05 }}
+            style={{
+              paddingLeft: wd * 0.01,
+              alignItems: "flex-start",
+            }}
           >
-            <Text style={{ fontWeight: "bold", fontSize: ht * 0.02 }}>
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: ht * 0.034,
+                paddingLeft: wd * 0.03,
+              }}
+            >
               {name}
             </Text>
-            <Text style={{ color: "grey", paddingLeft: wd * 0.07 }}>
+            <Text
+              style={{
+                width: wd * 0.6,
+                // backgroundColor: "red",
+                color: "grey",
+                paddingLeft: wd * 0.13,
+              }}
+            >
               {department}
             </Text>
           </View>
@@ -502,7 +527,7 @@ function Profile({ navigation }) {
   );
 }
 
-export default Profile;
+export default Profile1;
 
 const styles = StyleSheet.create({
   wallpaper: {

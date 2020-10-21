@@ -6,6 +6,7 @@ import {
   StatusBar,
   Text,
   Platform,
+  Image,
 } from "react-native";
 import { ProgressChart } from "react-native-chart-kit";
 import MapView, { Marker, Circle } from "react-native-maps";
@@ -23,15 +24,13 @@ const wd = Dimensions.get("window").height;
 function Home({ WorkTime }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [attendence, setAttendence] = useState(0);
-  const [graph, setGraph] = useState(0);
-  const [tab, setTab] = useState(1);
   const [coords, setCoords] = useState({
     latitude: 17.4387,
     longitude: 78.3946,
   });
-  // const { user } = route.params;
-  // const { naam } = route.params;
+  const [employeename, setEmployeeName] = useState("");
+  const [employeeimage, setEmployeeImage] = useState();
+
   const route = useRoute();
   const navigation = useNavigation();
   const [region, setRegion] = useState({
@@ -197,29 +196,19 @@ function Home({ WorkTime }) {
     text = JSON.stringify(location.coords.latitude);
     text1 = JSON.stringify(location.coords.longitude);
   }
-  const data = {
-    // labels: ["Swim", "Bike", "Run"], // optional
-    data: [graph],
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
+  const getInfo = async () => {
+    const user = await AsyncStorage.getItem("user");
+    let userinfo = JSON.parse(user);
+    console.log(userinfo.photo);
+    setEmployeeName(userinfo.empName);
+    setEmployeeImage(userinfo.photo);
   };
 
-  const chartConfig = {
-    backgroundColor: "#e26a00",
-    backgroundGradientFrom: "black",
-    backgroundGradientTo: "black",
-    decimalPlaces: 2, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    // barPercentage:100,
-    style: {
-      borderRadius: 16,
-    },
-    propsForDots: {
-      r: "6",
-      strokeWidth: "2",
-      stroke: "#ffa726",
-    },
-  };
-  console.log("number");
   return (
     <ScrollView>
       <View style={{ backgroundColor: "lightgrey" }}>
@@ -252,50 +241,76 @@ function Home({ WorkTime }) {
               marginTop: 2,
               borderRadius: ht * 0.03,
               flexDirection: "row",
-              alignItems: "center",
             }}
           >
             <View
-              style={{ alignItems: "center", flex: 2, paddingLeft: wd * 0.02 }}
+              style={{
+                flex: 3,
+                paddingLeft: wd * 0.02,
+              }}
             >
-              {/* <Text style={{ fontWeight: "bold" }}>
-              Hi {user} {naam}, Your Attenece till Now is..
-            </Text> */}
-              {/* <Text style={{ fontWeight: "bold" }}>
-              Your Attendence for Today is
-              {attendence == 1 ? attendence * 100 : 0} %
-            </Text> */}
-              <Text style={{ fontWeight: "bold" }}>
-                Your Attendence Time for Today is {graph} Secs
-              </Text>
-              <Text style={{ fontWeight: "bold" }}>Latitude :{text}</Text>
-              <Text style={{ fontWeight: "bold" }}>Longitude : {text1}</Text>
-              {/* <Text>total time is :{total}</Text> */}
-              {/* <Text>total count is :{countvalue}</Text> */}
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={{ fontWeight: "bold", fontSize: ht * 0.06 }}>
+                  Welcome!!!
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: ht * 0.07,
+                    color: "#FD8C1E",
+                  }}
+                >
+                  {employeename}
+                </Text>
+              </View>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text
+                  style={{
+                    color: "#F33939",
+                    fontWeight: "700",
+                  }}
+                >
+                  "Rest at the end, not in the middle"
+                </Text>
+              </View>
             </View>
             <View
               style={{
                 alignItems: "center",
                 borderRadius: ht * 0.2,
-                flex: 1,
+                flex: 2,
+                justifyContent: "center",
               }}
             >
-              <ProgressChart
-                data={data}
-                width={wd * 0.12}
-                height={ht * 0.24}
-                strokeWidth={16}
-                radius={32}
-                chartConfig={chartConfig}
-                hideLegend={true}
-                style={{ borderRadius: ht * 0.2 }}
+              <Image
+                style={{
+                  width: wd * 0.15,
+                  height: ht * 0.3,
+                  borderRadius: ht * 0.02,
+                }}
+                source={{
+                  uri: `${employeeimage}`,
+                }}
               />
             </View>
           </View>
         </View>
         {/* Attendence Ends */}
         {/* Map starts */}
-        <View style={{ marginBottom: ht * 0.56 }}>
+        <View
+          style={{
+            marginBottom: ht * 0.56,
+            alignItems: "center",
+          }}
+        >
           <MapView
             provider="google"
             region={region}
@@ -361,7 +376,8 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   map: {
-    width: wd * 0.52,
-    height: ht * 1.25,
+    width: wd * 0.5,
+    height: ht * 1.14,
+    borderRadius: ht * 0.04,
   },
 });

@@ -7,8 +7,8 @@ import {
   StatusBar,
   TouchableOpacity,
   BackHandler,
-  Alert,
   Platform,
+  Image,
 } from "react-native";
 import { Stopwatch } from "react-native-stopwatch-timer";
 import Constants from "expo-constants";
@@ -137,7 +137,14 @@ function WorkTime({ navigation: { navigate } }) {
           Number of Working Hours
         </Text>
       </View>
-      {/* Heading Ends */}
+      {/* cycle Starts */}
+      <View style={{ paddingBottom: ht * 0.05 }}>
+        <Image
+          source={require("../assets/cycle.gif")}
+          style={{ width: wd * 0.9, height: ht * 0.3, overflow: "hidden" }}
+        />
+      </View>
+      {/* Cycle Ends */}
       {/*  Timer Starts */}
       <Stopwatch
         ref={rrref}

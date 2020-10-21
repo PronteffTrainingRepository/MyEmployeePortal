@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StatusBar,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import Calendar from "./Calendar";
 import Home from "./Home";
@@ -17,34 +18,48 @@ import SheetHeader from "./headers/SheetHeader";
 import Sheet1 from "./Sheet1";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-community/async-storage";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
-function Main({ navigation }) {
+function Main1({ navigation }) {
   const [compo, setCompo] = useState(1);
   const [header, setHeader] = useState(1);
-   
-  let set1;
-  if (compo == 1) {
-    set1 = <Home />;
-  } else if (compo == 2) {
-    set1 = <Leave />;
-  } else if (compo == 3) {
-    set1 = <Calendar />;
-  } else {
-    set1 = <Sheet1 />;
+  const [set1, setSet1] = useState(null);
+  const [set2, setSet2] = useState(null);
+
+  useEffect(() => {
+    if (compo == 1) {
+      return setSet1(<Home />);
+    } else if (compo == 2) {
+      return setSet1(<Leave />);
+    } else if (compo == 3) {
+      return setSet1(<Calendar />);
+    } else {
+      return setSet1(<Sheet1 />);
+    }
+  }, [compo]);
+  useEffect(() => {
+    if (header == 1) {
+      return setSet2(<HomeHeader />);
+    } else if (header == 2) {
+      return setSet2(<LeaveHeader />);
+    } else if (header == 3) {
+      return setSet2(<CalendarHeader />);
+    } else {
+      return setSet2(<SheetHeader />);
+    }
+  }, [header]);
+//   console.log("set1", AsyncStorage.getItem(user));
+    console.log("set2", set2);
+    
+  if (set1 == null && set2 == null) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="blue" />
+      </View>
+    );
   }
-  let set2;
-  if (header == 1) {
-    set2 = <HomeHeader />;
-  } else if (header == 2) {
-    set2 = <LeaveHeader />;
-  } else if (header == 3) {
-    set2 = <CalendarHeader />;
-  } else {
-    set2 = <SheetHeader />;
-  }
-  
   return (
     <View>
       <StatusBar />
@@ -161,12 +176,11 @@ function Main({ navigation }) {
       </View>
 
       <View>{set1}</View>
-    
     </View>
   );
 }
 
-export default Main;
+export default Main1;
 
 const styles = StyleSheet.create({
   header: {

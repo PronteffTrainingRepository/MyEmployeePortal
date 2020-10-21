@@ -94,6 +94,9 @@ function Leave() {
         console.log(res.data);
         alert(res.data.msg);
         setDescription("");
+        setSelectedValue("Fever");
+        setSelectedValue1("0");
+        setDateFrom(new Date());
       })
       .catch((msg) => {
         alert(msg);

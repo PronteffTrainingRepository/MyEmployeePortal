@@ -4,11 +4,9 @@ import Routes from "./Routes";
 
 export default function App() {
   return (
-   
-      <View style={styles.container}>
-        <Routes  />
-      </View>
-  
+    <View style={styles.container}>
+      <Routes />
+    </View>
   );
 }
 

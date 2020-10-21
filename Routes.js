@@ -5,6 +5,7 @@ import Sheet from "./src/Sheet";
 import Login1 from "./src/Login1";
 import WorkTime from "./src/WorkTime";
 import Profile from "./src/Profile";
+import Main1 from "./src/Main1";
 import "react-native-gesture-handler";
 import AsyncStorage from "@react-native-community/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
@@ -17,12 +18,9 @@ const Stack = createStackNavigator();
 
 function Routes() {
   const [nav, setNav] = useState(null);
-  // const [checktoken, setCheckToken] = useState();
-  console.log("nav in starting", nav);
   const getData = async () => {
     const asynctoken = await AsyncStorage.getItem("token").then(
       (asynctoken) => {
-        console.log("asynctoken-----------", asynctoken);
         if (asynctoken != null) {
           setNav(true);
         } else {
@@ -36,8 +34,6 @@ function Routes() {
     getData();
   }, [nav]);
 
-  console.log("nav--------", nav);
-  console.log("");
   if (nav == null) {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
@@ -53,9 +49,14 @@ function Routes() {
           component={Login1}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Main"
           component={Main}
+          options={{ headerShown: false }}
+        /> */}
+        <Stack.Screen
+          name="Main"
+          component={Main1}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -68,6 +69,11 @@ function Routes() {
           component={Profile}
           options={{ headerShown: false }}
         />
+        {/* <Stack.Screen
+          name="Profile1"
+          component={Profile1}
+          options={{ headerShown: false }}
+        /> */}
         <Stack.Screen
           name="Sheet"
           component={Sheet}

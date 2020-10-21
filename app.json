@@ -22,7 +22,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "1.0.4",
+    "description": "1.0.6",
     "githubUrl": "https://github.com/Nikesh5888/Pronetff-FrontEnd",
     "android": {
       "package": "com.shubhampronteff.Prontee"
