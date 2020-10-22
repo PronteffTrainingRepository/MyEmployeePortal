@@ -37,30 +37,58 @@ function Leave() {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
-    setDateFrom(
-      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
-    );
-    setDateTo(
-      date.getDate() +
-        Number(selectedValue1) +
-        "/" +
-        (date.getMonth() + 1) +
-        "/" +
-        date.getFullYear()
-    );
+    // setDateFrom(
+    //   date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    // );
+    // setDateTo(
+    //   date.getDate() +
+    //     Number(selectedValue1) +
+    //     "/" +
+    //     (date.getMonth() + 1) +
+    //     "/" +
+    //     date.getFullYear()
+    // );
   };
   useEffect(() => {
+    let day = date.getDate() + Number(selectedValue1);
+    let month = date.getMonth();
+    if (day > 30 && (month == 3 || month == 5 || month == 8 || month == 10)) {
+      console.log("hello");
+      month = month + 1;
+      day = day - date.getDate();
+      if (day == 0) {
+        day = 1;
+      }
+    } else if (
+      day > 31 &&
+      (month == 0 ||
+        month == 2 ||
+        month == 4 ||
+        month == 6 ||
+        month == 7 ||
+        month == 9 ||
+        month == 11)
+    ) {
+      month = month + 1;
+      day = day - date.getDate();
+      if (day == 0) {
+        day = 1;
+      }
+    } else if (day > 28 && month == 1) {
+      month = month + 1;
+      day = day - date.getDate();
+      if (day == 0) {
+        day = 1;
+      }
+    }
     setDateFrom(
       date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
     );
-    setDateTo(
-      date.getDate() +
-        Number(selectedValue1) +
-        "/" +
-        (date.getMonth() + 1) +
-        "/" +
-        date.getFullYear()
-    );
+    setDateTo(day + "/" + (month + 1) + "/" + date.getFullYear());
+    return () => {
+      setDateTo("");
+      setDateFrom("");
+    };
   }, [date, selectedValue1, dateto, datefrom]);
 
   async function getData() {

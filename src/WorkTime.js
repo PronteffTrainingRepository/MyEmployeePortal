@@ -19,7 +19,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
-function WorkTime({ navigation: { navigate } }) {
+function WorkTime({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [start, setStart] = useState(false);
@@ -46,6 +46,7 @@ function WorkTime({ navigation: { navigate } }) {
       } else {
         alert("not in range");
         getData("not in range");
+        navigation.navigate("Main");
       }
     }
   };
@@ -82,7 +83,7 @@ function WorkTime({ navigation: { navigate } }) {
       .then(async (res) => {
         console.log(res.data);
         alert(res.data.msg);
-        navigate("Main");
+        navigation.navigate("Main");
       })
       .catch((msg) => {
         alert(msg);

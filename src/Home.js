@@ -7,9 +7,9 @@ import {
   Text,
   Platform,
   Image,
+  ActivityIndicator,
 } from "react-native";
-import { ProgressChart } from "react-native-chart-kit";
-import MapView, { Marker, Circle } from "react-native-maps";
+// import MapView, { Marker, Circle } from "react-native-maps";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
@@ -28,8 +28,8 @@ function Home({ WorkTime }) {
     latitude: 17.4387,
     longitude: 78.3946,
   });
-  const [employeename, setEmployeeName] = useState("");
-  const [employeeimage, setEmployeeImage] = useState();
+  const [employeename, setEmployeeName] = useState(null);
+  const [employeeimage, setEmployeeImage] = useState(null);
 
   const route = useRoute();
   const navigation = useNavigation();
@@ -207,6 +207,7 @@ function Home({ WorkTime }) {
     console.log(userinfo.photo);
     setEmployeeName(userinfo.empName);
     setEmployeeImage(userinfo.photo);
+    console.log("userinfo.photo", userinfo.photo);
   };
 
   return (
@@ -235,7 +236,7 @@ function Home({ WorkTime }) {
           </View>
           <View
             style={{
-              backgroundColor: "white",
+              backgroundColor: "#022169",
               width: wd * 0.48,
               height: ht * 0.4,
               marginTop: 2,
@@ -250,7 +251,13 @@ function Home({ WorkTime }) {
               }}
             >
               <View style={{ flex: 1, justifyContent: "center" }}>
-                <Text style={{ fontWeight: "bold", fontSize: ht * 0.06 }}>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: ht * 0.06,
+                    color: "white",
+                  }}
+                >
                   Welcome!!!
                 </Text>
               </View>
@@ -265,7 +272,7 @@ function Home({ WorkTime }) {
                   style={{
                     fontWeight: "bold",
                     fontSize: ht * 0.07,
-                    color: "#FD8C1E",
+                    color: "white",
                   }}
                 >
                   {employeename}
@@ -274,7 +281,7 @@ function Home({ WorkTime }) {
               <View style={{ flex: 1, justifyContent: "center" }}>
                 <Text
                   style={{
-                    color: "#F33939",
+                    color: "white",
                     fontWeight: "700",
                   }}
                 >
@@ -294,7 +301,9 @@ function Home({ WorkTime }) {
                 style={{
                   width: wd * 0.15,
                   height: ht * 0.3,
-                  borderRadius: ht * 0.02,
+                  borderRadius: ht * 0.01,
+                  borderColor: "white",
+                  borderWidth: wd * 0.002,
                 }}
                 source={{
                   uri: `${employeeimage}`,

@@ -53,7 +53,7 @@ function Login1({ navigation }) {
           const jsonuser = JSON.stringify(res.data.user);
           await AsyncStorage.setItem("user", jsonuser);
           console.log("jsonuser", jsonuser);
-          navigation.navigate("Main");
+          navigation.push("Main");
         }
       })
       .catch((msg) => {
@@ -163,8 +163,23 @@ function Login1({ navigation }) {
                 </View>
               </View>
               {/* Password Ends */}
+              {/* forget Password Starts */}
+              <View style={{ alignItems: "center", paddingTop: ht * 0.05 }}>
+                <TouchableOpacity onPress={() => alert("Login")}>
+                  <Text
+                    style={{
+                      color: "blue",
+                      fontWeight: "700",
+                      fontSize: ht * 0.025,
+                    }}
+                  >
+                    Forget Password?
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* Forget Password Ends */}
               {/* Submit Button  Starts */}
-              <View style={{ alignItems: "center", marginTop: ht * 0.1 }}>
+              <View style={{ alignItems: "center", marginTop: ht * 0.05 }}>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => {

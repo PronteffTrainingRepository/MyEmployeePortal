@@ -21,40 +21,92 @@ const ht = Dimensions.get("window").height;
 const wd = Dimensions.get("window").width;
 
 function Main({ navigation }) {
-  const [compo, setCompo] = useState(1);
-  const [header, setHeader] = useState(1);
+  const [compo, setCompo] = useState(0);
+  const [header, setHeader] = useState(0);
+  const componentss = [<Home />, <Leave />, <Calendar />, <Sheet1 />];
+  const headerss = [
+    <HomeHeader />,
+    <LeaveHeader />,
+    <CalendarHeader />,
+    <SheetHeader />,
+  ];
+  // let set1 = null;
+  // let set2 = null;
+  // console.log("set1", set1);
+  // console.log("set2", set2);
+  // if (compo == 1) {
+  //   set1 = <Home />;
+  //   console.log("home");
+  // } else if (compo == 2) {
+  //   set1 = <Leave />;
+  //   console.log("leave");
+  // } else if (compo == 3) {
+  //   set1 = <Calendar />;
+  //   console.log("calendar");
+  // } else if (compo == 4) {
+  //   set1 = <Sheet1 />;
+  //   console.log("sheet");
+  // }
+  // console.log("set1", set1);
+  // console.log("set2", set2);
+  // if (header == 1) {
+  //   set2 = <HomeHeader />;
+  //   console.log("homeheader");
+  // } else if (header == 2) {
+  //   set2 = <LeaveHeader />;
+  //   console.log("LeaveHeader");
+  // } else if (header == 3) {
+  //   set2 = <CalendarHeader />;
+  //   console.log("CalendarHeader");
+  // } else if (header == 4) {
+  //   set2 = <SheetHeader />;
+  //   console.log("SheetHeader");
+  // }
 
-  let set1;
-  if (compo == 1) {
-    set1 = <Home />;
-  } else if (compo == 2) {
-    set1 = <Leave />;
-  } else if (compo == 3) {
-    set1 = <Calendar />;
-  } else if (compo == 4) {
-    set1 = <Sheet1 />;
-  }
-  let set2;
-  if (header == 1) {
-    set2 = <HomeHeader />;
-  } else if (header == 2) {
-    set2 = <LeaveHeader />;
-  } else if (header == 3) {
-    set2 = <CalendarHeader />;
-  } else if (header == 4) {
-    set2 = <SheetHeader />;
-  }
-
+  // console.log("set1", set1);
+  // console.log("set2", set2);
   return (
     <View>
+      {/* {console.log("component set1", set1)}
+      {console.log("component set2", set2)} */}
       <StatusBar />
-      <View>{set2}</View>
+      <View>{headerss[header]}</View>
       <View style={styles.header}>
+        {/* Home starts */}
         <TouchableOpacity
           style={[
             styles.headerTouch,
             {
-              backgroundColor: header == 1 ? "#022169" : "white",
+              backgroundColor: header == 0 ? "#022169" : "white",
+              elevation: header == 0 ? 30 : 0,
+            },
+          ]}
+          onPress={() => {
+            setCompo(0);
+            setHeader(0);
+          }}
+        >
+          <Entypo
+            name="home"
+            size={24}
+            color={header == 0 ? "white" : "black"}
+          />
+          <Text
+            style={[
+              styles.headerText,
+              { color: header == 0 ? "white" : "black" },
+            ]}
+          >
+            Home
+          </Text>
+        </TouchableOpacity>
+        {/* Home Ends */}
+        {/* Leave Starts */}
+        <TouchableOpacity
+          style={[
+            styles.headerTouch,
+            {
+              backgroundColor: header === 1 ? "#022169" : "white",
               elevation: header == 1 ? 30 : 0,
             },
           ]}
@@ -63,8 +115,8 @@ function Main({ navigation }) {
             setHeader(1);
           }}
         >
-          <Entypo
-            name="home"
+          <FontAwesome5
+            name="temperature-high"
             size={24}
             color={header == 1 ? "white" : "black"}
           />
@@ -74,15 +126,17 @@ function Main({ navigation }) {
               { color: header == 1 ? "white" : "black" },
             ]}
           >
-            Home
+            Leave
           </Text>
         </TouchableOpacity>
+        {/* Leave Ends */}
+        {/* Calendar Starts */}
         <TouchableOpacity
           style={[
             styles.headerTouch,
             {
-              backgroundColor: header === 2 ? "#022169" : "white",
-              elevation: header == 3 ? 30 : 0,
+              backgroundColor: header == 2 ? "#022169" : "white",
+              elevation: header == 2 ? 30 : 0,
             },
           ]}
           onPress={() => {
@@ -90,8 +144,8 @@ function Main({ navigation }) {
             setHeader(2);
           }}
         >
-          <FontAwesome5
-            name="temperature-high"
+          <Entypo
+            name="calendar"
             size={24}
             color={header == 2 ? "white" : "black"}
           />
@@ -101,15 +155,17 @@ function Main({ navigation }) {
               { color: header == 2 ? "white" : "black" },
             ]}
           >
-            Leave
+            Calendar
           </Text>
         </TouchableOpacity>
+        {/* Calendar Ends */}
+        {/* Records starts */}
         <TouchableOpacity
           style={[
             styles.headerTouch,
             {
               backgroundColor: header == 3 ? "#022169" : "white",
-              elevation: header == 1 ? 30 : 0,
+              elevation: header == 3 ? 30 : 0,
             },
           ]}
           onPress={() => {
@@ -117,8 +173,8 @@ function Main({ navigation }) {
             setHeader(3);
           }}
         >
-          <Entypo
-            name="calendar"
+          <FontAwesome5
+            name="book"
             size={24}
             color={header == 3 ? "white" : "black"}
           />
@@ -128,39 +184,13 @@ function Main({ navigation }) {
               { color: header == 3 ? "white" : "black" },
             ]}
           >
-            Calendar
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.headerTouch,
-            {
-              backgroundColor: header == 4 ? "#022169" : "white",
-              elevation: header == 4 ? 30 : 0,
-            },
-          ]}
-          onPress={() => {
-            setCompo(4);
-            setHeader(4);
-          }}
-        >
-          <FontAwesome5
-            name="book"
-            size={24}
-            color={header == 4 ? "white" : "black"}
-          />
-          <Text
-            style={[
-              styles.headerText,
-              { color: header == 4 ? "white" : "black" },
-            ]}
-          >
             Records
           </Text>
         </TouchableOpacity>
+        {/* Records Ends */}
       </View>
 
-      <View>{set1}</View>
+      <View>{componentss[compo]}</View>
     </View>
   );
 }

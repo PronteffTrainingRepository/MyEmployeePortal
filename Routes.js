@@ -7,6 +7,8 @@ import WorkTime from "./src/WorkTime";
 import Profile from "./src/Profile";
 import Main1 from "./src/Main1";
 import "react-native-gesture-handler";
+import Main2 from "./src/Main2";
+import Login from "./src/Login";
 import AsyncStorage from "@react-native-community/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -43,20 +45,22 @@ function Routes() {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={nav ? "Main" : "Login1"}>
+      {/* <Stack.Navigator initialRouteName={nav ? "Main" : "Login1"}> */}
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login1"
           component={Login1}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }}
-        /> */}
+
         <Stack.Screen
           name="Main"
-          component={Main1}
+          component={Main}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -69,16 +73,16 @@ function Routes() {
           component={Profile}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Profile1"
           component={Profile1}
           options={{ headerShown: false }}
-        /> */}
-        <Stack.Screen
+        />
+       <Stack.Screen
           name="Sheet"
           component={Sheet}
           options={{ headerShown: false }}
-        />
+        /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

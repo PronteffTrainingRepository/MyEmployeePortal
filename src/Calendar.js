@@ -172,7 +172,7 @@ function Calendar() {
           >
             <View style={[styles.section, { backgroundColor: "purple" }]}>
               <Text style={styles.holidayname}>Gandhi Jayanti</Text>
-              <Text style={styles.holidaytime}>Octuber 2, Friday</Text>
+              <Text style={styles.holidaytime}>October 2, Friday</Text>
             </View>
           </TouchableOpacity>
           {/* 8 ends */}
@@ -189,7 +189,7 @@ function Calendar() {
           >
             <View style={[styles.section, { backgroundColor: "tomato" }]}>
               <Text style={styles.holidayname}>Vijaya Dashmi</Text>
-              <Text style={styles.holidaytime}>Octuber 26, Monday</Text>
+              <Text style={styles.holidaytime}>October 26, Monday</Text>
             </View>
           </TouchableOpacity>
           {/* 9 ends */}

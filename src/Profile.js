@@ -276,10 +276,11 @@ function Profile1({ navigation }) {
         {/* Dp Starts */}
         <View
           style={{
-            position: "relative",
-            top: -ht * 0.11,
-            left: wd * 0.31,
+            position: "absolute",
+            top: ht * 0.19,
+            left: wd * 0.27,
             // backgroundColor: "red",
+            alignItems: "center",
           }}
         >
           {image == null ? (
@@ -299,25 +300,21 @@ function Profile1({ navigation }) {
           {/* Name Starts */}
           <View
             style={{
-              paddingLeft: wd * 0.01,
-              alignItems: "flex-start",
+              alignItems: "center",
+              paddingTop: ht * 0.01,
             }}
           >
             <Text
               style={{
                 fontWeight: "bold",
                 fontSize: ht * 0.034,
-                paddingLeft: wd * 0.03,
               }}
             >
               {name}
             </Text>
             <Text
               style={{
-                width: wd * 0.6,
-                // backgroundColor: "red",
                 color: "grey",
-                paddingLeft: wd * 0.13,
               }}
             >
               {department}

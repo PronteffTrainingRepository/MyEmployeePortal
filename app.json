@@ -25,7 +25,10 @@
     "description": "1.0.6",
     "githubUrl": "https://github.com/Nikesh5888/Pronetff-FrontEnd",
     "android": {
-      "package": "com.shubhampronteff.Prontee"
+      "package": "com.shubhampronteff.Prontee",
+       "config": {
+      "googleMaps": { "apiKey": "AIzaSyDu9M5hxGv8SAvBjg7TUstCQI_IfaQ1a0c" }   
+   }
     }
   }
 }
