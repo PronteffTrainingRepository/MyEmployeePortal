@@ -65,7 +65,7 @@ function Login1({ navigation }) {
     setBorder({ isFocused: true });
   };
   const onFocusChange1 = () => {
-    setBorder1({ isFocused: true });
+    setBorder1({ isFocused1: true });
   };
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", function () {
@@ -129,6 +129,7 @@ function Login1({ navigation }) {
                       borderWidth: isFocused1 ? wd * 0.01 : 0.003,
                     },
                   ]}
+                 
                   placeholder="Password"
                   placeholderTextColor="silver"
                   onChangeText={(text) => setPassword(text)}
@@ -165,7 +166,7 @@ function Login1({ navigation }) {
               {/* Password Ends */}
               {/* forget Password Starts */}
               <View style={{ alignItems: "center", paddingTop: ht * 0.05 }}>
-                <TouchableOpacity onPress={() => alert("Login")}>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                   <Text
                     style={{
                       color: "blue",

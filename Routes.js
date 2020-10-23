@@ -45,13 +45,9 @@ function Routes() {
   }
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator initialRouteName={nav ? "Main" : "Login1"}> */}
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
+      <Stack.Navigator initialRouteName={nav ? "Main" : "Login1"}>
+        {/* <Stack.Navigator initialRouteName="Login"> */}
+
         <Stack.Screen
           name="Login1"
           component={Login1}
@@ -61,6 +57,11 @@ function Routes() {
         <Stack.Screen
           name="Main"
           component={Main}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -74,15 +75,10 @@ function Routes() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Profile1"
-          component={Profile1}
-          options={{ headerShown: false }}
-        />
-       <Stack.Screen
           name="Sheet"
           component={Sheet}
           options={{ headerShown: false }}
-        /> 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

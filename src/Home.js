@@ -9,7 +9,7 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-// import MapView, { Marker, Circle } from "react-native-maps";
+import MapView, { Marker, Circle } from "react-native-maps";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Constants from "expo-constants";
 import * as Location from "expo-location";

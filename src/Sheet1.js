@@ -27,7 +27,9 @@ function Sheet1({ navigation }) {
     })
       .then((res) => {
         console.log("mark", res.data.data);
-        setMark(res.data.data);
+        let x = res.data.data;
+        x.reverse();
+        setMark(x);
       })
       .catch((err) => {
         alert(err);
@@ -76,31 +78,31 @@ function Sheet1({ navigation }) {
             </View>
           </View>
         ))} */}
-        <ScrollView>
-          <FlatList
-            data={mark}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item, index }) => (
-              <View
-                key={index}
-                style={[
-                  styles.item,
-                  { backgroundColor: index % 2 == 0 ? "#063D3A" : "#FD8C1E" },
-                ]}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.record}>{item.logoutDate}</Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.record}>{item.logoutTime}</Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.record}>{item.totalWorkingHrs}</Text>
-                </View>
+
+        <FlatList
+  
+          data={mark}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item, index }) => (
+            <View
+              key={index}
+              style={[
+                styles.item,
+                { backgroundColor: index % 2 == 0 ? "#063D3A" : "#FD8C1E" },
+              ]}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={styles.record}>{item.logoutDate}</Text>
               </View>
-            )}
-          />
-        </ScrollView>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.record}>{item.logoutTime}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.record}>{item.totalWorkingHrs}</Text>
+              </View>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
@@ -111,7 +113,7 @@ export default Sheet1;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    flex: 1,
+    // flex: 1,
   },
   item: {
     flexDirection: "row",

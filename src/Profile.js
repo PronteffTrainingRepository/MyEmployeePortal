@@ -62,13 +62,12 @@ function Profile1({ navigation }) {
         // base64: true,
       });
       if (!data.cancelled) {
-        console.log("data--------", data);
         let newFile = {
           uri: data.uri,
           type: `test/${data.uri.split(".")[1]}`,
           name: `test.${data.uri.split(".")[1]}`,
         };
-        console.log("datdda--------", newFile);
+
         setImage(data.uri);
         sendServerImage(newFile);
       }
@@ -86,10 +85,6 @@ function Profile1({ navigation }) {
     let User = JSON.parse(asyncuser);
 
     const asynctoken = await AsyncStorage.getItem("token");
-    console.log("====================================");
-    console.log(User._id, newFile);
-    console.log("====================================");
-
     const data = new FormData();
     data.append("file", newFile);
     data.append("upload_preset", "employeeApp");
@@ -101,7 +96,6 @@ function Profile1({ navigation }) {
       .then((res) => res.json())
       .then((data) => {
         setSendImage(data.url);
-        console.log("asdjkfhkasfhkjadlhsf", data.url);
         if (data.url) {
           Axios.post(
             `http://183.83.219.220:5000/user/profilePicChange/${User._id}`,
@@ -117,7 +111,6 @@ function Profile1({ navigation }) {
           )
             .then((res) => {
               console.log("responsee", res.data);
-              console.log("hello");
             })
             .catch((err) => {
               alert("i am in catch block ", err);
@@ -129,11 +122,7 @@ function Profile1({ navigation }) {
   const GetData = async () => {
     const asyncuser = await AsyncStorage.getItem("user");
     let User = JSON.parse(asyncuser);
-    console.log(User._id);
-    // console.log("hshshsh", asyncuser);
     const asynctoken = await AsyncStorage.getItem("token");
-
-    console.log(asynctoken);
     Axios.get(`http://183.83.219.220:5000/user/getUser/${User._id}`, {
       headers: {
         contentType: "application/json",
@@ -141,7 +130,6 @@ function Profile1({ navigation }) {
       },
     })
       .then((res) => {
-        console.log("responsee", res.data.user.empName);
         setName(res.data.user.empName);
         setEmpId(res.data.user.empId);
         setdesignation(res.data.user.designation);
@@ -154,7 +142,6 @@ function Profile1({ navigation }) {
         setDateOfBirth(res.data.user.DOB);
         setPhoto(res.data.user.photo);
         setDepartment(res.data.user.department);
-        console.log(res.data);
       })
       .catch((err) => {
         alert(err);
@@ -163,7 +150,6 @@ function Profile1({ navigation }) {
 
   const setChangePassword = async () => {
     const asynctoken = await AsyncStorage.getItem("token");
-    console.log(asynctoken);
     if (modalnewpassword === modalconfirmpassword) {
       Axios.post(
         `http://183.83.219.220:5000/user/passwordReset`,
@@ -278,7 +264,7 @@ function Profile1({ navigation }) {
           style={{
             position: "absolute",
             top: ht * 0.19,
-            left: wd * 0.27,
+            left: wd * 0.315,
             // backgroundColor: "red",
             alignItems: "center",
           }}
@@ -297,32 +283,32 @@ function Profile1({ navigation }) {
               <Image style={styles.dp} source={{ uri: image }} />
             </View>
           )}
-          {/* Name Starts */}
-          <View
-            style={{
-              alignItems: "center",
-              paddingTop: ht * 0.01,
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: ht * 0.034,
-              }}
-            >
-              {name}
-            </Text>
-            <Text
-              style={{
-                color: "grey",
-              }}
-            >
-              {department}
-            </Text>
-          </View>
-          {/* Name Ends */}
         </View>
         {/* Dp Ends */}
+        {/* Name Starts */}
+        <View
+          style={{
+            alignItems: "center",
+            paddingTop: ht * 0.085,
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: ht * 0.034,
+            }}
+          >
+            {name}
+          </Text>
+          <Text
+            style={{
+              color: "grey",
+            }}
+          >
+            {department}
+          </Text>
+        </View>
+        {/* Name Ends */}
       </View>
       {/*  Main View Ends*/}
       {/* Modal Starts */}
