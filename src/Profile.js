@@ -111,6 +111,9 @@ function Profile1({ navigation }) {
           )
             .then((res) => {
               console.log("responsee", res.data);
+              if (res.status == 200) {
+                alert("Image successfully updated");
+              }
             })
             .catch((err) => {
               alert("i am in catch block ", err);

@@ -41,6 +41,10 @@ function WorkTime({ navigation }) {
         location.coords.latitude <= 17.4387999 &&
         location.coords.longitude >= 78.3946001 &&
         location.coords.longitude <= 78.3946999
+        // locations.coords.latitude >= 17.438250832 &&
+        // locations.coords.latitude <= 17.439149167 &&
+        // locations.coords.longitude >= 78.394129193 &&
+        // locations.coords.longitude <= 78.395070806
       ) {
         setStart(true);
       } else {

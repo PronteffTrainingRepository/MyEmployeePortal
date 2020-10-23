@@ -129,7 +129,6 @@ function Login1({ navigation }) {
                       borderWidth: isFocused1 ? wd * 0.01 : 0.003,
                     },
                   ]}
-                 
                   placeholder="Password"
                   placeholderTextColor="silver"
                   onChangeText={(text) => setPassword(text)}
@@ -167,6 +166,7 @@ function Login1({ navigation }) {
               {/* forget Password Starts */}
               <View style={{ alignItems: "center", paddingTop: ht * 0.05 }}>
                 <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                  {/* <TouchableOpacity onPress={() => alert("work in progress")}> */}
                   <Text
                     style={{
                       color: "blue",
