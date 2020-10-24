@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ActivityIndicator, View, Text } from "react-native";
+import Sheet1 from "./src/Sheet1";
 
 // import { enableScreens } from "react-native-screens";
 // enableScreens();
@@ -75,8 +76,8 @@ function Routes() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Sheet"
-          component={Sheet}
+          name="Sheet1"
+          component={Sheet1}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

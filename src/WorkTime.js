@@ -9,6 +9,7 @@ import {
   BackHandler,
   Platform,
   Image,
+  ImageBackground,
 } from "react-native";
 import { Stopwatch } from "react-native-stopwatch-timer";
 import Constants from "expo-constants";
@@ -121,71 +122,65 @@ function WorkTime({ navigation }) {
   console.log(total);
   const rrref = useRef();
   return (
-    <View style={styles.container}>
-      <StatusBar />
-      {/* Heading Starts */}
-      <View
-        style={{
-          position: "absolute",
-          top: 20,
-          backgroundColor: "black",
-          paddingLeft: wd * 0.04,
-          paddingRight: wd * 0.04,
-          paddingTop: ht * 0.02,
-          paddingBottom: ht * 0.02,
-          borderRadius: ht * 0.01,
-        }}
-      >
-        <Text
-          style={{ color: "white", fontWeight: "bold", fontSize: ht * 0.03 }}
+    <ImageBackground
+      source={require("../assets/splash2.png")}
+      style={{ flex: 1, resizeMode: "cover" }}
+    >
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
+        {/* Heading Starts */}
+        <View
+          style={{
+            position: "absolute",
+            top: 20,
+            backgroundColor: "#F33939",
+            paddingLeft: wd * 0.08,
+            paddingRight: wd * 0.08,
+            paddingTop: ht * 0.02,
+            paddingBottom: ht * 0.02,
+            borderRadius: ht * 0.01,
+          }}
         >
-          Number of Working Hours
-        </Text>
-      </View>
-      {/* cycle Starts */}
-      <View style={{ paddingBottom: ht * 0.05 }}>
-        <Image
-          source={require("../assets/cycle.gif")}
-          style={{ width: wd * 0.9, height: ht * 0.3, overflow: "hidden" }}
+          <Text
+            style={{ color: "white", fontWeight: "bold", fontSize: ht * 0.03 }}
+          >
+            Number of Working Hours
+          </Text>
+        </View>
+        {/* cycle Starts */}
+        <View style={{ paddingBottom: ht * 0.01, elevation: 5 }}>
+          <Image
+            source={require("../assets/cycle.gif")}
+            style={{ width: wd * 1, height: ht * 0.4, overflow: "hidden" }}
+          />
+        </View>
+        {/* Cycle Ends */}
+        {/*  Timer Starts */}
+        <Stopwatch
+          ref={rrref}
+          start={start}
+          // reset={reset}
+          // options={options}
+          getTime={(time) => {
+            setTotal(time);
+          }}
+          // getMsecs={(time) => console.log(time / 100)}
+          // getMsecs={(time) => {
+          //   if (start == false) {
+          //     setTotal(time);
+          //   }
+          // }}
         />
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => getData("Done for the day")}
+          >
+            <Text style={styles.buttontext}>Done for the Day</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      {/* Cycle Ends */}
-      {/*  Timer Starts */}
-      <Stopwatch
-        ref={rrref}
-        start={start}
-        // reset={reset}
-        // options={options}
-        getTime={(time) => {
-          setTotal(time);
-        }}
-        // getMsecs={(time) => console.log(time / 100)}
-        // getMsecs={(time) => {
-        //   if (start == false) {
-        //     setTotal(time);
-        //   }
-        // }}
-      />
-      {/* <Text>{total}</Text> */}
-      {/*  Timer Ends */}
-      {/* Done for the Day Starts */}
-      <View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => getData("Done for the day")}
-        >
-          <Text style={styles.buttontext}>Done For the Day</Text>
-        </TouchableOpacity>
-      </View>
-      {/* <View>
-        <Text>{count}</Text>
-      </View> */}
-      {/* Done for the Day Ends */}
-      {/* <View>
-        <Text>Latitude:{text}</Text>
-        <Text>Longitude:{text1}</Text>
-      </View> */}
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -196,20 +191,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "orange",
+    // backgroundColor: "orange",
   },
   button: {
     width: wd * 0.75,
-    height: ht * 0.06,
-    backgroundColor: "black",
-    borderRadius: ht * 0.02,
+    height: ht * 0.07,
+    backgroundColor: "#0678F4",
+    borderRadius: ht * 0.03,
     marginTop: ht * 0.1,
   },
   buttontext: {
     color: "white",
     textAlign: "center",
     textAlignVertical: "center",
-    height: ht * 0.06,
+    height: ht * 0.07,
     fontWeight: "bold",
     fontSize: ht * 0.04,
   },

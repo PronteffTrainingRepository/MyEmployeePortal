@@ -138,12 +138,17 @@ function Login({ navigation }) {
             keyboardVerticalOffset={keyboardVerticalOffset}
             behavior="position"
           >
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Login1")}
+            >
+              <AntDesign name="arrowleft" size={28} color="black" />
+            </TouchableOpacity>
+
             {/* Form Starts */}
             <View
               style={{
                 marginTop: ht * 0.05,
                 flex: 1,
-                // justifyContent: "center",
               }}
             >
               {/* Employee id Starts */}
@@ -287,8 +292,21 @@ function Login({ navigation }) {
                   style={styles.button}
                   // onPress={setChangePassword}
                   onPress={() => {
-                    sendVerification();
-                    setModalVisible(true);
+                    if (
+                      empid == "" ||
+                      phoneno == "" ||
+                      newpassword == "" ||
+                      confirmpassword == ""
+                    ) {
+                      alert("All fields must be filled");
+                    } else {
+                      if (newpassword == confirmpassword) {
+                        sendVerification();
+                        setModalVisible(true);
+                      } else {
+                        alert("New password and confirm password are not same");
+                      }
+                    }
                   }}
                 >
                   <Text style={styles.buttontext}>Submit</Text>
