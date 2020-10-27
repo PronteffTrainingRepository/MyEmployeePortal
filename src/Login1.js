@@ -221,11 +221,11 @@ const styles = StyleSheet.create({
     width: wd * 0.8,
     borderRadius: ht * 0.007,
     paddingLeft: wd * 0.03,
-    color: "#000000",
+    color: "#464967",
     height: ht * 0.055,
   },
   inputtext: {
-    color: "#000000",
+    color: "#464967",
     fontWeight: "bold",
     marginBottom: ht * 0.015,
     fontSize: ht * 0.025,

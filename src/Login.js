@@ -138,10 +138,8 @@ function Login({ navigation }) {
             keyboardVerticalOffset={keyboardVerticalOffset}
             behavior="position"
           >
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Login1")}
-            >
-              <AntDesign name="arrowleft" size={28} color="black" />
+            <TouchableOpacity onPress={() => navigation.navigate("Login1")}>
+              <AntDesign name="arrowleft" size={28} color="#464967" />
             </TouchableOpacity>
 
             {/* Form Starts */}
@@ -536,11 +534,11 @@ const styles = StyleSheet.create({
     width: wd * 0.8,
     borderRadius: ht * 0.007,
     paddingLeft: wd * 0.03,
-    color: "#000000",
+    color: "#464967",
     height: ht * 0.055,
   },
   inputtext: {
-    color: "black",
+    color: "#464967",
     fontWeight: "bold",
     marginBottom: ht * 0.015,
     fontSize: ht * 0.025,

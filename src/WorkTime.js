@@ -38,14 +38,14 @@ function WorkTime({ navigation }) {
     setLocation(location);
     if (location.coords !== null) {
       if (
-        location.coords.latitude >= 17.4387001 &&
-        location.coords.latitude <= 17.4387999 &&
-        location.coords.longitude >= 78.3946001 &&
-        location.coords.longitude <= 78.3946999
         // locations.coords.latitude >= 17.438250832 &&
         // locations.coords.latitude <= 17.439149167 &&
         // locations.coords.longitude >= 78.394129193 &&
         // locations.coords.longitude <= 78.395070806
+        location.coords.latitude >= 17.437501 &&
+        location.coords.latitude <= 17.439401 &&
+        location.coords.longitude >= 78.3941001 &&
+        location.coords.longitude <= 78.3955001
       ) {
         setStart(true);
       } else {

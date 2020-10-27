@@ -123,10 +123,10 @@ function Home({ WorkTime }) {
         if (locations.coords !== null) {
           console.log("im here too");
           if (
-            locations.coords.latitude >= 17.438250832 &&
-            locations.coords.latitude <= 17.439149167 &&
-            locations.coords.longitude >= 78.394129193 &&
-            locations.coords.longitude <= 78.395070806
+            location.coords.latitude >= 17.437501 &&
+            location.coords.latitude <= 17.439401 &&
+            location.coords.longitude >= 78.3941001 &&
+            location.coords.longitude <= 78.3955001
           ) {
             getData();
           } else {
@@ -332,7 +332,7 @@ function Home({ WorkTime }) {
             zoomControlEnabled={true}
           >
             <Marker coordinate={coordinates} pinColor="green" />
-            <Circle center={coords} radius={50} fillColor="transparent" />
+            {/* <Circle center={coords} radius={50} fillColor="transparent" /> */}
           </MapView>
         </View>
 
