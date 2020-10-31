@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: wd * 0.5,
-    height: ht * 1.14,
+    height: ht * 1.18,
     borderRadius: ht * 0.04,
   },
 });

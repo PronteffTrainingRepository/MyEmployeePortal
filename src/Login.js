@@ -52,15 +52,17 @@ function Login({ navigation }) {
   const [mod4, setMod4] = useState("");
   const [mod5, setMod5] = useState("");
   const [mod6, setMod6] = useState("");
+  const [receivedcode, setReceivedCode] = useState("");
+
   console.log(code);
   const setChangePassword = async () => {
-    let no = phoneno.substr(3, 12);
+    // let no = phoneno.substr(3, 12);
 
     if (newpassword === confirmpassword) {
       Axios.post(`http://183.83.219.220:5000/user/resetPassword/`, {
         empId: `${empid}`,
         comfirmPassword: `${confirmpassword}`,
-        empPhoneNum: `${no}`,
+        empPhoneNum: `${phoneno}`,
         newPassword: `${newpassword}`,
       })
         .then((res) => {
@@ -81,20 +83,32 @@ function Login({ navigation }) {
   const sendVerification = () => {
     const phoneProvider = new firebase.auth.PhoneAuthProvider();
     phoneProvider
-      .verifyPhoneNumber(phoneno, recaptchaVerifier.current)
+      .verifyPhoneNumber(`+91${phoneno}`, recaptchaVerifier.current)
       .then(setVerificationId);
   };
-  const addCode = () => {
-    let data = mod1 + mod2 + mod3 + mod4 + mod5 + mod6;
-    setCode(data);
-    confirmCode(data);
-    console.log("code", code);
-  };
-  const confirmCode = (data) => {
-    console.log(data);
+  // const addCode = () => {
+  //   let data = mod1 + mod2 + mod3 + mod4 + mod5 + mod6;
+  //   setCode(data);
+  //   confirmCode(data);
+  //   console.log("code", code);
+  // };
+  // const confirmCode = (data) => {
+  //   console.log(data);
+  //   const credential = firebase.auth.PhoneAuthProvider.credential(
+  //     verificationId,
+  //     data
+  //   );
+  //   firebase
+  //     .auth()
+  //     .signInWithCredential(credential)
+  //     .then((result) => {
+  //       setChangePassword();
+  //     });
+  // };
+  const confirmCode = () => {
     const credential = firebase.auth.PhoneAuthProvider.credential(
       verificationId,
-      data
+      receivedcode
     );
     firebase
       .auth()
@@ -124,6 +138,49 @@ function Login({ navigation }) {
   const modal4 = useRef();
   const modal5 = useRef();
   const modal6 = useRef();
+  const handleKeyPress1 = ({ nativeEvent: { key: keyValue } }) => {
+    if (keyValue === "Backspace") {
+      Keyboard.dismiss();
+    } else {
+      modal2.current.focus();
+    }
+  };
+  const handleKeyPress2 = ({ nativeEvent: { key: keyValue } }) => {
+    if (keyValue === "Backspace") {
+      modal1.current.focus();
+    } else {
+      modal3.current.focus();
+    }
+  };
+  const handleKeyPress3 = ({ nativeEvent: { key: keyValue } }) => {
+    if (keyValue === "Backspace") {
+      modal2.current.focus();
+    } else {
+      modal4.current.focus();
+    }
+  };
+  const handleKeyPress4 = ({ nativeEvent: { key: keyValue } }) => {
+    if (keyValue === "Backspace") {
+      modal3.current.focus();
+    } else {
+      modal5.current.focus();
+    }
+  };
+  const handleKeyPress5 = ({ nativeEvent: { key: keyValue } }) => {
+    if (keyValue === "Backspace") {
+      modal4.current.focus();
+    } else {
+      modal6.current.focus();
+    }
+  };
+  const handleKeyPress6 = ({ nativeEvent: { key: keyValue } }) => {
+    if (keyValue === "Backspace") {
+      modal5.current.focus();
+    } else {
+      Keyboard.dismiss();
+    }
+  };
+
   return (
     <ImageBackground
       source={require("../assets/splash2.png")}
@@ -217,7 +274,7 @@ function Login({ navigation }) {
                 <View
                   style={{
                     position: "absolute",
-                    top: ht * 0.055,
+                    top: ht * 0.06,
                     right: wd * 0.05,
                   }}
                 >
@@ -262,7 +319,7 @@ function Login({ navigation }) {
                 <View
                   style={{
                     position: "absolute",
-                    top: ht * 0.055,
+                    top: ht * 0.06,
                     right: wd * 0.05,
                   }}
                 >
@@ -344,7 +401,7 @@ function Login({ navigation }) {
                           styles.modalinputtext,
                           {
                             paddingLeft: wd * 0.05,
-                            paddingTop: wd * 0.01,
+                            paddingTop: wd * 0.05,
                             fontWeight: "bold",
                             fontSize: ht * 0.025,
                           },
@@ -355,15 +412,16 @@ function Login({ navigation }) {
                     </View>
                     {/* Modal Form Starts */}
                     <View style={styles.modalform}>
-                      <View style={styles.modalinputview}>
+                      {/* <View style={styles.modalinputview}>
                         <TextInput
                           style={styles.modalinput}
                           ref={modal1}
                           onChangeText={(text) => setMod1(text)}
+                          onChange={handleKeyPress1}
                           Value={mod1}
                           autoFocus={true}
-                          onKeyPress={() => modal2.current.focus()}
-                          keyboardType="number-pad"
+                          // onKeyPress={handleKeyPress1}
+                          keyboardType="phone-pad"
                           maxLength={1}
                         />
                       </View>
@@ -372,9 +430,10 @@ function Login({ navigation }) {
                           style={styles.modalinput}
                           ref={modal2}
                           onChangeText={(text) => setMod2(text)}
+                          onChange={handleKeyPress2}
                           Value={mod2}
-                          onKeyPress={() => modal3.current.focus()}
-                          keyboardType="number-pad"
+                          // onKeyPress={handleKeyPress2}
+                          keyboardType="phone-pad"
                           maxLength={1}
                         />
                       </View>
@@ -383,9 +442,10 @@ function Login({ navigation }) {
                           style={styles.modalinput}
                           ref={modal3}
                           onChangeText={(text) => setMod3(text)}
+                          onChange={handleKeyPress3}
                           Value={mod3}
-                          keyboardType="number-pad"
-                          onKeyPress={() => modal4.current.focus()}
+                          keyboardType="phone-pad"
+                          // onKeyPress={handleKeyPress3}
                           maxLength={1}
                         />
                       </View>
@@ -394,9 +454,10 @@ function Login({ navigation }) {
                           style={styles.modalinput}
                           ref={modal4}
                           onChangeText={(text) => setMod4(text)}
+                          onChange={handleKeyPress4}
                           Value={mod4}
-                          keyboardType="number-pad"
-                          onKeyPress={() => modal5.current.focus()}
+                          keyboardType="phone-pad"
+                          // onKeyPress={handleKeyPress4}
                           maxLength={1}
                         />
                       </View>
@@ -405,9 +466,10 @@ function Login({ navigation }) {
                           style={styles.modalinput}
                           ref={modal5}
                           onChangeText={(text) => setMod5(text)}
+                          onChange={handleKeyPress5}
                           Value={mod5}
-                          keyboardType="number-pad"
-                          onKeyPress={() => modal6.current.focus()}
+                          keyboardType="phone-pad"
+                          // onKeyPress={handleKeyPress5}
                           maxLength={1}
                         />
                       </View>
@@ -417,11 +479,26 @@ function Login({ navigation }) {
                           ref={modal6}
                           onChangeText={(text) => setMod6(text)}
                           Value={mod6}
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           maxLength={1}
-                          onKeyPress={() => Keyboard.dismiss()}
+                          // onKeyPress={handleKeyPress6}
+                          onChange={handleKeyPress6}
                         />
-                      </View>
+                      </View> */}
+                      <TextInput
+                        style={{
+                          width: wd * 0.63,
+                          height: ht * 0.05,
+                          borderWidth: wd * 0.002,
+                          paddingLeft: wd * 0.03,
+                          fontWeight: "bold",
+                        }}
+                        placeholder="Enter OTP"
+                        keyboardType="phone-pad"
+                        autoFocus={true}
+                        onChangeText={(text) => setReceivedCode(text)}
+                        value={receivedcode}
+                      />
                     </View>
                     {/* Modal Forms Ends */}
 
@@ -435,7 +512,7 @@ function Login({ navigation }) {
                         style={{
                           // backgroundColor: "red",
                           position: "relative",
-                          top: ht * 0.001,
+                          top: -ht * 0.017,
                           height: ht * 0.066,
                         }}
                       >
@@ -481,9 +558,9 @@ function Login({ navigation }) {
                         <TouchableHighlight
                           style={{ flex: 1 }}
                           onPress={() => {
-                            addCode();
+                            // addCode();
                             // alert(code);
-                            // confirmCode();
+                            confirmCode();
                           }}
                         >
                           <Text
@@ -563,11 +640,11 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: "absolute",
-    top: ht * 0.3,
-    left: wd * 0.15,
+    top: ht * 0.17,
+    left: wd * 0.13,
     backgroundColor: "white",
     elevation: 5,
-    height: ht * 0.27,
+    height: ht * 0.32,
     width: wd * 0.74,
     borderRadius: ht * 0.01,
   },

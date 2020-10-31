@@ -141,7 +141,7 @@ function Login1({ navigation }) {
                 <View
                   style={{
                     position: "absolute",
-                    top: ht * 0.055,
+                    top: ht * 0.06,
                     right: wd * 0.05,
                   }}
                 >
